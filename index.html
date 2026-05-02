@@ -1398,10 +1398,6 @@
           <span>suzanab@cosmoscenery.com</span>
         </div>
         <div class="contact-info-item">
-          <span class="contact-info-label">Phone</span>
-          <span>+351 937 364 795</span>
-        </div>
-        <div class="contact-info-item">
           <span class="contact-info-label">Location</span>
           <span>Porto, Portugal · Remote across Europe</span>
         </div>
@@ -1415,22 +1411,22 @@
         </div>
       </div>
     </div>
-    <div class="contact-form">
+    <form class="contact-form" action="https://formspree.io/f/meenoyqz" method="POST">
       <div class="form-group">
         <label>Your Name</label>
-        <input type="text" placeholder="Full name">
+        <input type="text" name="name" placeholder="Full name" required>
       </div>
       <div class="form-group">
         <label>Company</label>
-        <input type="text" placeholder="Company or organisation">
+        <input type="text" name="company" placeholder="Company or organisation">
       </div>
       <div class="form-group">
         <label>Email</label>
-        <input type="email" placeholder="your@email.com">
+        <input type="email" name="email" placeholder="your@email.com" required>
       </div>
       <div class="form-group">
         <label>I'm interested in</label>
-        <select>
+        <select name="service">
           <option value="">Select a service</option>
           <option>Operational Consulting (SME)</option>
           <option>BI & Dashboard Implementation</option>
@@ -1441,10 +1437,10 @@
       </div>
       <div class="form-group">
         <label>Tell me about your challenge</label>
-        <textarea placeholder="Briefly describe what you're working on or trying to solve..."></textarea>
+        <textarea name="message" placeholder="Briefly describe what you're working on or trying to solve..."></textarea>
       </div>
-      <button class="btn-primary" style="width:100%; padding: 1rem;">Send Message →</button>
-    </div>
+      <button type="submit" class="btn-primary" style="width:100%; padding: 1rem;">Send Message →</button>
+    </form>
   </div>
 </section>
 
