@@ -1,128 +1,1474 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cosmoscenery Analytics</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Lato', sans-serif;
-      background-color: #0A0F2C;
-      color: white;
-      line-height: 1.6;
-    }
-    header {
-      background-color: #6C4BA4;
-      padding: 1.5rem 1rem 0.5rem;
-      text-align: center;
-    }
-    header img {
-      max-height: 200px;
-      margin-bottom: 0.5rem;
-    }
-    header p {
-      margin-top: 0;
-    }
-    section {
-      padding: 1.5rem 1.5rem;
-      max-width: 900px;
-      margin: auto;
-    }
-    h2 {
-      color: #50C7F2;
-      font-family: 'Orbitron', sans-serif;
-      margin-bottom: 0.5rem;
-    }
-    .cta {
-      text-align: center;
-      margin-top: 1.5rem;
-    }
-    .cta a {
-      background-color: #50C7F2;
-      color: #0A0F2C;
-      padding: 0.75rem 1.5rem;
-      border-radius: 8px;
-      text-decoration: none;
-      font-weight: bold;
-    }
-    footer {
-      background-color: #1A1F3C;
-      padding: 1.5rem;
-      text-align: center;
-      font-size: 0.9rem;
-      color: #B0B5BF;
-    }
-    .external-links {
-      display: flex;
-      justify-content: center;
-      gap: 2rem;
-      margin-top: 2rem;
-    }
-    .external-links a {
-      color: #50C7F2;
-      text-decoration: none;
-      font-weight: bold;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cosmoscenery Analytics</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0A0A0B;
+    --white: #F5F4F0;
+    --cream: #EDE9E0;
+    --accent: #C8F03C;
+    --accent2: #3CF0C8;
+    --mid: #1A1A1E;
+    --muted: #6B6B72;
+    --border: rgba(255,255,255,0.08);
+    --serif: 'DM Serif Display', serif;
+    --sans: 'DM Sans', sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.5rem 4rem;
+    background: rgba(10,10,11,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    letter-spacing: 0.15em;
+    color: var(--accent);
+    text-transform: uppercase;
+  }
+
+  .nav-links {
+    display: flex; gap: 2.5rem; list-style: none;
+  }
+
+  .nav-links a {
+    color: rgba(245,244,240,0.65);
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--white); }
+
+  .nav-cta {
+    background: var(--accent);
+    color: var(--black) !important;
+    padding: 0.5rem 1.25rem;
+    border-radius: 2px;
+    font-weight: 600 !important;
+  }
+
+  .nav-cta:hover { background: var(--accent2) !important; color: var(--black) !important; }
+
+  /* ── SECTIONS ── */
+  section {
+    display: none;
+    min-height: 100vh;
+    padding: 8rem 4rem 6rem;
+  }
+
+  section.active { display: block; }
+
+  /* ── HOME ── */
+  #home {
+    display: none;
+    position: relative;
+    overflow: hidden;
+    padding: 0;
+  }
+
+  #home.active { display: block; }
+
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 100vh;
+  }
+
+  .hero-left {
+    padding: 10rem 4rem 6rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero-tag {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 2rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.2s forwards;
+  }
+
+  .hero-h1 {
+    font-family: var(--serif);
+    font-size: clamp(3rem, 5vw, 5.5rem);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 2rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.4s forwards;
+  }
+
+  .hero-h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .hero-sub {
+    font-size: 1.1rem;
+    color: rgba(245,244,240,0.6);
+    max-width: 480px;
+    line-height: 1.75;
+    margin-bottom: 3rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.6s forwards;
+  }
+
+  .hero-btns {
+    display: flex; gap: 1rem; flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.8s forwards;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: var(--black);
+    padding: 0.9rem 2rem;
+    border: none;
+    border-radius: 2px;
+    font-family: var(--sans);
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.03em;
+  }
+
+  .btn-primary:hover { background: var(--accent2); transform: translateY(-1px); }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--white);
+    padding: 0.9rem 2rem;
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 2px;
+    font-family: var(--sans);
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+  .hero-right {
+    background: var(--mid);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .hero-visual {
+    position: relative;
+    width: 400px;
+    height: 400px;
+  }
+
+  .ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    animation: rotate linear infinite;
+  }
+
+  .ring-1 { width: 300px; height: 300px; border-color: rgba(200,240,60,0.15); animation-duration: 20s; }
+  .ring-2 { width: 220px; height: 220px; border-color: rgba(60,240,200,0.2); animation-duration: 15s; animation-direction: reverse; }
+  .ring-3 { width: 140px; height: 140px; border-color: rgba(200,240,60,0.25); animation-duration: 10s; }
+
+  .ring-dot {
+    position: absolute;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    top: -4px; left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .ring-dot-2 { background: var(--accent2); }
+
+  .hero-center-text {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 2;
+  }
+
+  .hero-center-num {
+    font-family: var(--serif);
+    font-size: 3.5rem;
+    color: var(--white);
+    line-height: 1;
+  }
+
+  .hero-center-label {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-top: 0.5rem;
+  }
+
+  /* Stats bar */
+  .stats-bar {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .stat-item {
+    padding: 2.5rem 4rem;
+    border-right: 1px solid var(--border);
+  }
+
+  .stat-item:last-child { border-right: none; }
+
+  .stat-num {
+    font-family: var(--serif);
+    font-size: 2.5rem;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+
+  .stat-label {
+    font-size: 0.8rem;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+  }
+
+  /* Services preview */
+  .services-preview {
+    padding: 6rem 4rem;
+    background: var(--mid);
+  }
+
+  .section-tag {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+
+  .section-title {
+    font-family: var(--serif);
+    font-size: clamp(2rem, 3.5vw, 3rem);
+    line-height: 1.15;
+    margin-bottom: 3rem;
+    max-width: 500px;
+  }
+
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: var(--border);
+  }
+
+  .service-card {
+    background: var(--mid);
+    padding: 3rem;
+    transition: background 0.3s;
+    cursor: pointer;
+  }
+
+  .service-card:hover { background: #222228; }
+
+  .service-icon {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    margin-bottom: 1.5rem;
+  }
+
+  .service-card h3 {
+    font-family: var(--serif);
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .service-card p {
+    color: rgba(245,244,240,0.55);
+    font-size: 0.9rem;
+    line-height: 1.7;
+  }
+
+  /* ── ABOUT ── */
+  #about { background: var(--black); }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 6rem;
+    align-items: start;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .about-left { position: sticky; top: 8rem; }
+
+  .about-portrait {
+    width: 100%;
+    aspect-ratio: 3/4;
+    background: var(--mid);
+    border-radius: 2px;
+    overflow: hidden;
+    position: relative;
+    margin-bottom: 2rem;
+  }
+
+  .portrait-placeholder {
+    width: 100%; height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 1rem;
+    color: var(--muted);
+  }
+
+  .portrait-initials {
+    font-family: var(--serif);
+    font-size: 5rem;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  .portrait-name {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .about-credentials {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .credential {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.82rem;
+    color: rgba(245,244,240,0.55);
+  }
+
+  .credential-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+
+  .about-right h1 {
+    font-family: var(--serif);
+    font-size: clamp(2.5rem, 4vw, 3.5rem);
+    line-height: 1.1;
+    margin-bottom: 2rem;
+  }
+
+  .about-right h1 em { font-style: italic; color: var(--accent); }
+
+  .about-lead {
+    font-size: 1.1rem;
+    color: rgba(245,244,240,0.7);
+    line-height: 1.8;
+    margin-bottom: 2rem;
+    border-left: 2px solid var(--accent);
+    padding-left: 1.5rem;
+  }
+
+  .about-body {
+    color: rgba(245,244,240,0.55);
+    line-height: 1.85;
+    font-size: 0.95rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .about-milestones {
+    margin-top: 3rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .milestone {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 2rem;
+    padding: 1.5rem 0;
+    border-bottom: 1px solid var(--border);
+    align-items: start;
+  }
+
+  .milestone-year {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    padding-top: 0.2rem;
+  }
+
+  .milestone-text {
+    font-size: 0.88rem;
+    color: rgba(245,244,240,0.6);
+    line-height: 1.6;
+  }
+
+  .milestone-text strong {
+    color: var(--white);
+    font-weight: 500;
+  }
+
+  /* ── SERVICES ── */
+  #services { background: var(--black); }
+
+  .services-header {
+    max-width: 700px;
+    margin-bottom: 5rem;
+  }
+
+  .services-header h1 {
+    font-family: var(--serif);
+    font-size: clamp(2.5rem, 4vw, 3.5rem);
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+  }
+
+  .services-header h1 em { font-style: italic; color: var(--accent); }
+  .services-header p { color: rgba(245,244,240,0.55); font-size: 1rem; line-height: 1.75; }
+
+  .offering {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    margin-bottom: 6rem;
+  }
+
+  .offering-intro {
+    background: var(--mid);
+    padding: 4rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .offering-tag {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    color: var(--accent2);
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+  }
+
+  .offering-intro h2 {
+    font-family: var(--serif);
+    font-size: 2rem;
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
+  }
+
+  .offering-intro p {
+    color: rgba(245,244,240,0.55);
+    font-size: 0.9rem;
+    line-height: 1.75;
+    flex: 1;
+  }
+
+  .offering-price {
+    margin-top: 2rem;
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+  }
+
+  .offering-details {
+    background: var(--mid);
+    padding: 4rem;
+  }
+
+  .offering-details h4 {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+  }
+
+  .deliverable-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .deliverable-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    font-size: 0.88rem;
+    color: rgba(245,244,240,0.7);
+    line-height: 1.5;
+  }
+
+  .deliverable-list li::before {
+    content: '→';
+    color: var(--accent);
+    font-family: var(--mono);
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+  }
+
+  .process-strip {
+    background: var(--mid);
+    padding: 4rem;
+    margin-bottom: 2rem;
+  }
+
+  .process-steps {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+    margin-top: 2rem;
+  }
+
+  .process-step { position: relative; }
+
+  .step-num {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    margin-bottom: 0.75rem;
+  }
+
+  .process-step h4 {
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+
+  .process-step p {
+    font-size: 0.8rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* ── CASE STUDIES ── */
+  #cases { background: var(--black); }
+
+  .cases-header {
+    max-width: 700px;
+    margin-bottom: 4rem;
+  }
+
+  .cases-header h1 {
+    font-family: var(--serif);
+    font-size: clamp(2.5rem, 4vw, 3.5rem);
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+  }
+
+  .cases-header h1 em { font-style: italic; color: var(--accent); }
+  .cases-header p { color: rgba(245,244,240,0.55); font-size: 1rem; line-height: 1.75; }
+
+  .case-card {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    margin-bottom: 1px;
+  }
+
+  .case-left {
+    background: var(--mid);
+    padding: 4rem;
+  }
+
+  .case-tag {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    color: var(--accent2);
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+  }
+
+  .case-left h2 {
+    font-family: var(--serif);
+    font-size: 1.75rem;
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
+  }
+
+  .case-left p {
+    color: rgba(245,244,240,0.55);
+    font-size: 0.9rem;
+    line-height: 1.75;
+  }
+
+  .case-right {
+    background: var(--mid);
+    padding: 4rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .case-metrics {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .case-metric-num {
+    font-family: var(--serif);
+    font-size: 2.5rem;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 0.4rem;
+  }
+
+  .case-metric-label {
+    font-size: 0.78rem;
+    color: var(--muted);
+    line-height: 1.4;
+  }
+
+  .case-quote {
+    padding: 1.5rem;
+    background: rgba(200,240,60,0.05);
+    border-left: 2px solid var(--accent);
+    font-size: 0.88rem;
+    color: rgba(245,244,240,0.6);
+    font-style: italic;
+    line-height: 1.65;
+  }
+
+  .case-quote cite {
+    display: block;
+    margin-top: 0.75rem;
+    font-style: normal;
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+  }
+
+  /* ── INSIGHTS ── */
+  #insights { background: var(--black); }
+
+  .insights-header {
+    max-width: 700px;
+    margin-bottom: 4rem;
+  }
+
+  .insights-header h1 {
+    font-family: var(--serif);
+    font-size: clamp(2.5rem, 4vw, 3.5rem);
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+  }
+
+  .insights-header h1 em { font-style: italic; color: var(--accent); }
+  .insights-header p { color: rgba(245,244,240,0.55); font-size: 1rem; line-height: 1.75; }
+
+  .insights-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 1px;
+    background: var(--border);
+  }
+
+  .insight-featured {
+    background: var(--mid);
+    padding: 4rem;
+  }
+
+  .insight-tag {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+  }
+
+  .insight-featured h2 {
+    font-family: var(--serif);
+    font-size: 2rem;
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
+  }
+
+  .insight-featured p {
+    color: rgba(245,244,240,0.55);
+    font-size: 0.9rem;
+    line-height: 1.8;
+    margin-bottom: 2rem;
+  }
+
+  .insight-meta {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+  }
+
+  .insight-list {
+    background: var(--mid);
+    padding: 3rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .insight-item {
+    padding: 1.75rem 0;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+  }
+
+  .insight-item:last-child { border-bottom: none; }
+
+  .insight-item-tag {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    color: var(--accent2);
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  .insight-item h4 {
+    font-family: var(--serif);
+    font-size: 1rem;
+    line-height: 1.35;
+    margin-bottom: 0.4rem;
+    transition: color 0.2s;
+  }
+
+  .insight-item:hover h4 { color: var(--accent); }
+
+  .insight-item-date {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+  }
+
+  /* ── CONTACT ── */
+  #contact { background: var(--black); }
+
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .contact-left h1 {
+    font-family: var(--serif);
+    font-size: clamp(2.5rem, 4vw, 3.5rem);
+    line-height: 1.1;
+    margin-bottom: 2rem;
+  }
+
+  .contact-left h1 em { font-style: italic; color: var(--accent); }
+
+  .contact-left p {
+    color: rgba(245,244,240,0.55);
+    font-size: 1rem;
+    line-height: 1.8;
+    margin-bottom: 3rem;
+  }
+
+  .contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .contact-info-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 0.88rem;
+    color: rgba(245,244,240,0.6);
+  }
+
+  .contact-info-label {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    text-transform: uppercase;
+    min-width: 80px;
+  }
+
+  .contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .form-group label {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    background: var(--mid);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 0.9rem 1.25rem;
+    color: var(--white);
+    font-family: var(--sans);
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.2s;
+    resize: vertical;
+  }
+
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    border-color: var(--accent);
+  }
+
+  .form-group select option { background: var(--mid); }
+
+  .form-group textarea { min-height: 130px; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--mid);
+    padding: 3rem 4rem;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .footer-logo {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    color: var(--accent);
+    text-transform: uppercase;
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+
+  .footer-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.8rem;
+    transition: color 0.2s;
+  }
+
+  .footer-links a:hover { color: var(--white); }
+
+  .footer-copy {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes rotate {
+    from { transform: translate(-50%, -50%) rotate(0deg); }
+    to { transform: translate(-50%, -50%) rotate(360deg); }
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    nav { padding: 1.25rem 1.5rem; }
+    .nav-links { display: none; }
+    section { padding: 7rem 1.5rem 4rem; }
+    .hero-grid, .about-grid, .contact-grid { grid-template-columns: 1fr; }
+    .hero-right { min-height: 300px; }
+    .stats-bar { grid-template-columns: repeat(2,1fr); }
+    .services-grid, .offering, .case-card, .insights-grid { grid-template-columns: 1fr; }
+    .process-steps { grid-template-columns: repeat(2,1fr); }
+    .case-metrics { grid-template-columns: 1fr 1fr; }
+    footer { flex-direction: column; align-items: flex-start; }
+    .hero-left { padding: 8rem 1.5rem 3rem; }
+    .services-preview { padding: 4rem 1.5rem; }
+  }
+</style>
 </head>
 <body>
-  <header>
-    <img src="logo.png" alt="Cosmoscenery Analytics Logo">
-    <p>Exploring the universe of data for you</p>
-  </header>
 
-  <section>
-    <h2>Mission</h2>
-    <p>At Cosmoscenery Analytics, we transform complex data into clear, strategic and inspiring decision landscapes, helping companies navigate confidently through the universe of information.</p>
-  </section>
+<nav>
+  <div class="nav-logo">Cosmoscenery Analytics</div>
+  <ul class="nav-links">
+    <li><a href="#" onclick="show('home')">Home</a></li>
+    <li><a href="#" onclick="show('about')">About</a></li>
+    <li><a href="#" onclick="show('services')">Services</a></li>
+    <li><a href="#" onclick="show('work')">Live Work</a></li>
+    <li><a href="#" onclick="show('cases')">Case Studies</a></li>
+    <li><a href="#" onclick="show('insights')">Insights</a></li>
+    <li><a href="#" onclick="show('contact')" class="nav-cta">Let's Talk</a></li>
+  </ul>
+</nav>
 
-  <section>
-    <h2>Vision</h2>
-    <p>To be recognized as a creative and innovative reference in data analysis, exploring new constellations of knowledge that guide smart and sustainable decisions.</p>
-  </section>
-
-  <section>
-    <h2>Services</h2>
-    <ul>
-      <li>Data Analytics & Business Intelligence</li>
-      <li>Data Visualization & Dashboards</li>
-      <li>Strategic Consulting Based on Data</li>
-      <li>Data Storytelling & Visual Communication</li>
-    </ul>
-  </section>
-
-  <section>
-    <h2>Team</h2>
-    <p><strong>Suzana Alípio</strong><br>
-    Founder & Data Strategy Consultant</p>
-    <p>
-      With a background in business strategy and a passion for data-driven insights, Suzana founded Cosmoscenery Analytics to help organizations transform complex information into strategic action. She combines analytical thinking with creativity to uncover meaningful patterns and opportunities.
-    </p>
-    <p>
-      <a href="https://www.linkedin.com/in/suzanaalipio/" target="_blank" style="color: #50C7F2;">View LinkedIn profile</a>
-    </p>
-  </section>
-
-  <section>
-    <h2>Workplace Policy</h2>
-    <p>Cosmoscenery Analytics operates as a fully flexible and remote-first company. We value autonomy, creativity, and meaningful impact over rigid structures. Our approach is project-driven, client-focused, and built on trust, collaboration, and continuous learning.</p>
-  </section>
-
-  <section>
-    <h2>Contact</h2>
-    <p>Would you like to know more or schedule a meeting?</p>
-    <div class="cta">
-      <a href="mailto:cosmoscenery@gmail.com">Contact Us</a>
+<!-- ═══════════════════════════════ HOME ═══════════════════════════════ -->
+<section id="home" class="active">
+  <div class="hero-grid">
+    <div class="hero-left">
+      <div class="hero-tag">// Operations · Analytics · ESG</div>
+      <h1 class="hero-h1">Your data exists.<br><em>Make it decide.</em></h1>
+      <p class="hero-sub">We help SMEs and growing companies transform operational data into clear decisions — through KPI systems, BI dashboards, and process design that actually sticks.</p>
+      <div class="hero-btns">
+        <button class="btn-primary" onclick="show('services')">Explore Services</button>
+        <button class="btn-secondary" onclick="show('contact')">Start a Conversation</button>
+      </div>
     </div>
-    <div class="external-links">
-      <a href="https://www.linkedin.com/company/cosmoscenery-analytics/" target="_blank">LinkedIn</a>
-      <a href="https://public.tableau.com/app/profile/suzana.al.pio/vizzes" target="_blank">Tableau</a>
+    <div class="hero-right">
+      <div class="hero-visual">
+        <div class="ring ring-1"><div class="ring-dot"></div></div>
+        <div class="ring ring-2"><div class="ring-dot ring-dot-2"></div></div>
+        <div class="ring ring-3"></div>
+        <div class="hero-center-text">
+          <div class="hero-center-num">500+</div>
+          <div class="hero-center-label">Companies transformed</div>
+        </div>
+      </div>
     </div>
-  </section>
+  </div>
 
-  <footer>
-    &copy; 2025 Cosmoscenery Analytics. All rights reserved.
-  </footer>
+  <div class="stats-bar">
+    <div class="stat-item">
+      <div class="stat-num">29+</div>
+      <div class="stat-label">Years of operational experience</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">99%</div>
+      <div class="stat-label">Project approval rate</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">€40M+</div>
+      <div class="stat-label">Managed across funded programs</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">90</div>
+      <div class="stat-label">Days to operational clarity</div>
+    </div>
+  </div>
+
+  <div class="services-preview">
+    <div class="section-tag">// What we do</div>
+    <h2 class="section-title">Senior-level expertise,<br>built for scale.</h2>
+    <div class="services-grid">
+      <div class="service-card" onclick="show('services')">
+        <div class="service-icon">01 / OPERATIONS</div>
+        <h3>Operational Consulting</h3>
+        <p>End-to-end process design, KPI frameworks and performance systems that give your management team real visibility over what's happening in the business.</p>
+      </div>
+      <div class="service-card" onclick="show('services')">
+        <div class="service-icon">02 / ANALYTICS</div>
+        <h3>BI & Data Analytics</h3>
+        <p>Power BI, Looker Studio and Tableau dashboards built around how your business actually works — not generic templates that nobody opens after month one.</p>
+      </div>
+      <div class="service-card" onclick="show('services')">
+        <div class="service-icon">03 / ESG</div>
+        <h3>ESG Reporting</h3>
+        <p>Sustainability reporting and ESG frameworks designed for companies preparing for investor scrutiny, public funding, or regulatory compliance.</p>
+      </div>
+      <div class="service-card" onclick="show('services')">
+        <div class="service-icon">04 / PARTNERSHIP</div>
+        <h3>Subcontracting & Partnerships</h3>
+        <p>Senior operational and BI expertise available for software implementation firms, consultancies, and agencies looking to expand their service delivery.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════ ABOUT ═══════════════════════════════ -->
+<section id="about">
+  <div class="about-grid">
+    <div class="about-left">
+      <div class="about-portrait">
+        <div class="portrait-placeholder">
+          <div class="portrait-initials">SA</div>
+          <div class="portrait-name">Suzana Alípio</div>
+        </div>
+      </div>
+      <div class="about-credentials">
+        <div class="credential"><div class="credential-dot"></div>PhD Candidate — University of Vigo</div>
+        <div class="credential"><div class="credential-dot"></div>MBA — European University Lisbon</div>
+        <div class="credential"><div class="credential-dot"></div>Google BI Professional Certificate (2026)</div>
+        <div class="credential"><div class="credential-dot"></div>Google Advanced Data Analytics (2025)</div>
+        <div class="credential"><div class="credential-dot"></div>Harvard Business School — Sustainable Strategy</div>
+        <div class="credential"><div class="credential-dot"></div>IAPMEI Accredited Mentor</div>
+      </div>
+    </div>
+    <div class="about-right">
+      <div class="section-tag">// About</div>
+      <h1>Operations at scale.<br><em>Decisions from data.</em></h1>
+      <p class="about-lead">I'm Suzana Alípio — Industrial Engineer, strategist, and founder of Cosmoscenery Analytics. For 29 years, I've been building the systems that make complex organisations run clearly.</p>
+      <p class="about-body">My career started on the factory floor, learning how production systems break down and how quality control actually works. From there, it moved into entrepreneurship programs, where I spent two decades coordinating 150+ stakeholders simultaneously — entrepreneurs, financial institutions, consultants, and public bodies — across national-scale programs in Portugal.</p>
+      <p class="about-body">What I discovered, program after program, is that most organisations have the data. What they lack is the architecture to turn it into action. KPIs that nobody tracks. Dashboards that nobody opens. Reports that arrive too late. Processes that live in people's heads rather than in systems.</p>
+      <p class="about-body">Cosmoscenery Analytics exists to close that gap — combining deep operational expertise with modern data tools to build decision systems that actually change how companies are managed.</p>
+      <p class="about-body">I'm based in Porto, work remotely across Europe, and bring a rare combination: the analytical depth of a data scientist, the strategic eye of an MBA, and the hands-on experience of someone who has managed real operations under real pressure for nearly three decades.</p>
+
+      <div class="about-milestones">
+        <div class="milestone">
+          <div class="milestone-year">2026</div>
+          <div class="milestone-text"><strong>Google Business Intelligence Certificate</strong> — Data models, pipelines, dashboard reporting</div>
+        </div>
+        <div class="milestone">
+          <div class="milestone-year">2021</div>
+          <div class="milestone-text"><strong>Portugal Ventures INNOV-ID Winner</strong> — €100,000 investment for Bioworld circular economy startup</div>
+        </div>
+        <div class="milestone">
+          <div class="milestone-year">2015</div>
+          <div class="milestone-text"><strong>Startup Porto Accelerator</strong> — Built and led from concept to execution; 32 technology-based startups created</div>
+        </div>
+        <div class="milestone">
+          <div class="milestone-year">2013</div>
+          <div class="milestone-text"><strong>Founded Cosmoscenery Analytics</strong> — Data-driven consulting for SMEs across operations, BI, and strategy</div>
+        </div>
+        <div class="milestone">
+          <div class="milestone-year">2000</div>
+          <div class="milestone-text"><strong>ANJE Executive Director</strong> — National entrepreneurship programs; 500+ companies, €40M+ in managed funding</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════ SERVICES ═══════════════════════════════ -->
+<section id="services">
+  <div class="services-header">
+    <div class="section-tag">// Services</div>
+    <h1>What we <em>actually</em> deliver.</h1>
+    <p>Two core offerings, designed for different entry points — but built on the same principle: operational clarity that translates directly into better decisions and better results.</p>
+  </div>
+
+  <!-- Offering 1 -->
+  <div class="offering">
+    <div class="offering-intro">
+      <div>
+        <div class="offering-tag">01 / Consulting</div>
+        <h2>Operational Consulting for SMEs</h2>
+        <p>A structured 90-day engagement that gives your management team full operational visibility — KPI systems, automated dashboards, process documentation, and ESG reporting ready for investors and regulators.</p>
+        <p style="margin-top:1rem; color: rgba(245,244,240,0.4); font-size:0.88rem; line-height:1.7;">Designed for companies with €1M–€20M in revenue that are making decisions based on gut instinct rather than data — and know it's costing them.</p>
+      </div>
+      <div class="offering-price">ENGAGEMENT — PROJECT BASIS · REMOTE OR ON-SITE</div>
+    </div>
+    <div class="offering-details">
+      <h4>What's included</h4>
+      <ul class="deliverable-list">
+        <li>Operational diagnostic — mapping current state, data gaps, and decision bottlenecks</li>
+        <li>KPI framework design — metrics aligned to your strategy, not industry templates</li>
+        <li>Power BI or Looker Studio dashboard implementation — built for daily management use</li>
+        <li>Process documentation and standardisation for key operational workflows</li>
+        <li>ESG baseline assessment and reporting structure</li>
+        <li>Performance management system — reviews, targets, and accountability structures</li>
+        <li>Monthly reporting automation — replacing manual Excel work with live data flows</li>
+        <li>30-day post-delivery support and team training</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Offering 2 -->
+  <div class="offering">
+    <div class="offering-intro">
+      <div>
+        <div class="offering-tag">02 / Partnership</div>
+        <h2>Senior Resource for Consulting & Software Firms</h2>
+        <p>Available as a senior subcontracted resource for implementation firms, consultancies, and analytics agencies that need deep operational and business expertise alongside their technical teams.</p>
+        <p style="margin-top:1rem; color: rgba(245,244,240,0.4); font-size:0.88rem; line-height:1.7;">The gap between what a BI implementation delivers technically and what a client actually adopts operationally is where most projects fail. I close that gap.</p>
+      </div>
+      <div class="offering-price">FLEXIBLE AVAILABILITY · PROJECT OR RETAINER BASIS</div>
+    </div>
+    <div class="offering-details">
+      <h4>Where I add value in your projects</h4>
+      <ul class="deliverable-list">
+        <li>Business requirements gathering — translating management needs into technical specs</li>
+        <li>KPI and metric definition — ensuring dashboards measure what actually matters</li>
+        <li>Operational process mapping before and during implementation</li>
+        <li>Change management and internal adoption — making sure the tool gets used</li>
+        <li>ESG data architecture and reporting layer design</li>
+        <li>Client-facing workshops on data literacy and BI adoption</li>
+        <li>Post-implementation operational review and optimisation</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Process -->
+  <div class="process-strip">
+    <div class="section-tag">// How it works</div>
+    <h2 style="font-family: var(--serif); font-size: 1.75rem; margin-top: 0.5rem;">From first conversation to operational clarity.</h2>
+    <div class="process-steps">
+      <div class="process-step">
+        <div class="step-num">STEP 01</div>
+        <h4>Discovery Call</h4>
+        <p>30 minutes to understand your context, identify the core problem, and determine whether we're the right fit.</p>
+      </div>
+      <div class="process-step">
+        <div class="step-num">STEP 02</div>
+        <h4>Operational Diagnosis</h4>
+        <p>Deep-dive into your data landscape, decision flows, and operational gaps. Delivered as a structured diagnostic report.</p>
+      </div>
+      <div class="process-step">
+        <div class="step-num">STEP 03</div>
+        <h4>Design & Build</h4>
+        <p>KPI frameworks, dashboard implementation, and process documentation — built iteratively with your team's input.</p>
+      </div>
+      <div class="process-step">
+        <div class="step-num">STEP 04</div>
+        <h4>Embed & Sustain</h4>
+        <p>Training, documentation, and 30-day support to ensure adoption. The system should run without us.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════ LIVE WORK ═══════════════════════════════ -->
+<section id="work">
+  <div class="cases-header">
+    <div class="section-tag">// Live Work</div>
+    <h1>Dashboards <em>in action.</em></h1>
+    <p>Real analytical work built during Google's Data Analytics and Business Intelligence programs — illustrating the depth of analysis and visualisation we bring to every engagement.</p>
+  </div>
+
+  <div style="display:grid; grid-template-columns: repeat(3,1fr); gap:1px; background:var(--border);">
+
+    <div style="background:var(--mid); padding:2.5rem; display:flex; flex-direction:column; justify-content:space-between;">
+      <div>
+        <div class="case-tag">Data Analytics · TikTok</div>
+        <h3 style="font-family:var(--serif); font-size:1.35rem; line-height:1.25; margin-bottom:1rem;">TikTok Claims — Exploratory Data Analysis</h3>
+        <p style="color:rgba(245,244,240,0.55); font-size:0.85rem; line-height:1.7;">Structured EDA on TikTok claim datasets — identifying patterns, outliers, and data quality issues to support classification modelling decisions.</p>
+      </div>
+      <a href="https://public.tableau.com/app/profile/suzana.al.pio/viz/TikTok-EDAofClaimDataset/Story1" target="_blank" style="display:inline-block; margin-top:2rem; background:var(--accent); color:var(--black); padding:0.75rem 1.5rem; border-radius:2px; font-size:0.85rem; font-weight:600; text-decoration:none; text-align:center; transition:background 0.2s;" onmouseover="this.style.background='var(--accent2)'" onmouseout="this.style.background='var(--accent)'">View Dashboard →</a>
+    </div>
+
+    <div style="background:var(--mid); padding:2.5rem; display:flex; flex-direction:column; justify-content:space-between;">
+      <div>
+        <div class="case-tag">BI · Customer Service</div>
+        <h3 style="font-family:var(--serif); font-size:1.35rem; line-height:1.25; margin-bottom:1rem;">Google Fiber — Repeat Calls Analysis</h3>
+        <p style="color:rgba(245,244,240,0.55); font-size:0.85rem; line-height:1.7;">Dashboard tracking repeat customer service calls to identify resolution failures, peak periods, and operational improvement opportunities across service categories.</p>
+      </div>
+      <a href="https://public.tableau.com/app/profile/suzana.al.pio/viz/GoogleFiber_17704866269160/RepeatCalls" target="_blank" style="display:inline-block; margin-top:2rem; background:var(--accent); color:var(--black); padding:0.75rem 1.5rem; border-radius:2px; font-size:0.85rem; font-weight:600; text-decoration:none; text-align:center; transition:background 0.2s;" onmouseover="this.style.background='var(--accent2)'" onmouseout="this.style.background='var(--accent)'">View Dashboard →</a>
+    </div>
+
+    <div style="background:var(--mid); padding:2.5rem; display:flex; flex-direction:column; justify-content:space-between;">
+      <div>
+        <div class="case-tag">ESG · Sustainability</div>
+        <h3 style="font-family:var(--serif); font-size:1.35rem; line-height:1.25; margin-bottom:1rem;">CO₂ Emissions — Sustainability Dashboard</h3>
+        <p style="color:rgba(245,244,240,0.55); font-size:0.85rem; line-height:1.7;">Interactive ESG dashboard visualising CO₂ emissions data — directly aligned with our sustainability reporting and ESG framework services for companies under regulatory scrutiny.</p>
+      </div>
+      <a href="https://public.tableau.com/app/profile/suzana.al.pio/viz/DashboardsCO2_17304471540610/Painel1" target="_blank" style="display:inline-block; margin-top:2rem; background:var(--accent); color:var(--black); padding:0.75rem 1.5rem; border-radius:2px; font-size:0.85rem; font-weight:600; text-decoration:none; text-align:center; transition:background 0.2s;" onmouseover="this.style.background='var(--accent2)'" onmouseout="this.style.background='var(--accent)'">View Dashboard →</a>
+    </div>
+
+  </div>
+
+  <div style="margin-top:1px; background:var(--mid); padding:2rem 2.5rem; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem;">
+    <span style="font-family:var(--mono); font-size:0.7rem; color:var(--muted); letter-spacing:0.1em;">ALL DASHBOARDS BUILT IN TABLEAU PUBLIC · GOOGLE DATA ANALYTICS & BI PROGRAMS</span>
+    <a href="https://public.tableau.com/app/profile/suzana.al.pio/vizzes" target="_blank" style="font-family:var(--mono); font-size:0.7rem; color:var(--accent); letter-spacing:0.1em; text-decoration:none;">VIEW FULL PROFILE →</a>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════ CASE STUDIES ═══════════════════════════════ -->
+<section id="cases">
+  <div class="cases-header">
+    <div class="section-tag">// Case Studies</div>
+    <h1>Results that <em>speak clearly.</em></h1>
+    <p>Selected engagements illustrating the operational and analytical transformations we've delivered across different sectors and organisational sizes.</p>
+  </div>
+
+  <div class="case-card">
+    <div class="case-left">
+      <div class="case-tag">National Entrepreneurship Program · Portugal</div>
+      <h2>Managing 150+ Stakeholders Across Concurrent National Programs</h2>
+      <p>Designed and led full operational management for simultaneous national entrepreneurship programs — coordinating entrepreneurs, financial institutions, consultants, and public bodies across concurrent program cycles without service disruption.</p>
+      <p style="margin-top:1rem; color: rgba(245,244,240,0.4); font-size:0.85rem; line-height:1.7;">Challenge: Managing parallel programs with 120+ entrepreneurs per cycle, each requiring individual investment pipelines through multiple institutional channels with distinct approval criteria.</p>
+    </div>
+    <div class="case-right">
+      <div class="case-metrics">
+        <div>
+          <div class="case-metric-num">99%</div>
+          <div class="case-metric-label">Investment project approval rate through rigorous QC</div>
+        </div>
+        <div>
+          <div class="case-metric-num">500+</div>
+          <div class="case-metric-label">Companies created across program cycles</div>
+        </div>
+        <div>
+          <div class="case-metric-num">€40M+</div>
+          <div class="case-metric-label">In managed grants and subsidised funding</div>
+        </div>
+        <div>
+          <div class="case-metric-num">150+</div>
+          <div class="case-metric-label">Direct and indirect stakeholders per cycle</div>
+        </div>
+      </div>
+      <div class="case-quote">
+        "Replaced manual reporting with automated Python + Excel workflows, delivering monthly performance reports to the executive board and enabling early detection of delays across 500+ active contracts."
+        <cite>— ANJE National Programs, 2000–Present</cite>
+      </div>
+    </div>
+  </div>
+
+  <div class="case-card">
+    <div class="case-left">
+      <div class="case-tag">Circular Economy Startup · Porto</div>
+      <h2>Building Bioworld from Concept to Funded Operations</h2>
+      <p>Founded and scaled a circular economy startup, managing cross-functional teams, R&D coordination, investor relations, and full financial operations from ideation to funded execution.</p>
+      <p style="margin-top:1rem; color: rgba(245,244,240,0.4); font-size:0.85rem; line-height:1.7;">Challenge: Building investor-grade operational systems and a fundable business model in a nascent market, from zero to institutional validation.</p>
+    </div>
+    <div class="case-right">
+      <div class="case-metrics">
+        <div>
+          <div class="case-metric-num">€100K</div>
+          <div class="case-metric-label">Investment secured from Portugal Ventures</div>
+        </div>
+        <div>
+          <div class="case-metric-num">2020</div>
+          <div class="case-metric-label">BluAct Award — Best Blue Economy Project</div>
+        </div>
+      </div>
+      <div class="case-quote">
+        "Built and led a cross-functional team coordinating R&D, market validation, and commercial development simultaneously. Managed full investment process from pitch to due diligence to operational execution."
+        <cite>— Bioworld Social Impact Lda, 2020–2022</cite>
+      </div>
+    </div>
+  </div>
+
+  <div class="case-card">
+    <div class="case-left">
+      <div class="case-tag">Technology Startups · Porto Accelerator</div>
+      <h2>Startup Porto Accelerator — 32 Tech Startups with International Potential</h2>
+      <p>Built and led the Startup Porto Accelerator from concept to execution, coordinating multidisciplinary teams across technology validation, market entry, investor relations, and operational setup for early-stage ventures.</p>
+      <p style="margin-top:1rem; color: rgba(245,244,240,0.4); font-size:0.85rem; line-height:1.7;">Challenge: Simultaneously developing 32 technology-based companies while maintaining operational quality and consistency across radically different business models and maturity levels.</p>
+    </div>
+    <div class="case-right">
+      <div class="case-metrics">
+        <div>
+          <div class="case-metric-num">32</div>
+          <div class="case-metric-label">Technology startups created with international potential</div>
+        </div>
+        <div>
+          <div class="case-metric-num">3yrs</div>
+          <div class="case-metric-label">Program duration — zero service disruption</div>
+        </div>
+      </div>
+      <div class="case-quote">
+        "Designed scalable operational processes for program delivery, managed multidisciplinary coordination across mentors, investors, and institutional partners — while tracking individual company KPIs across all 32 ventures."
+        <cite>— Startup Porto Accelerator, 2015–2018</cite>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════ INSIGHTS ═══════════════════════════════ -->
+<section id="insights">
+  <div class="insights-header">
+    <div class="section-tag">// Insights</div>
+    <h1>Thinking out loud on <em>operations & data.</em></h1>
+    <p>Perspectives on operational excellence, data-driven management, ESG, and the systems that separate companies that scale from those that stall.</p>
+  </div>
+
+  <div class="insights-grid">
+    <div class="insight-featured">
+      <div class="insight-tag">Featured · Operations</div>
+      <h2>Why Your BI Dashboard Isn't Being Used — And What To Do About It</h2>
+      <p>Most Power BI implementations fail quietly. The dashboards get built, the data gets connected, and then six months later nobody's looking at them. The problem is almost never technical. It's operational. It's the gap between what a tool can show and what a management team actually needs to decide. Here's how to close it.</p>
+      <p>The root cause, in most cases, is that KPIs were defined by whoever was closest to the data — not by whoever was accountable for the decisions. A financial controller builds metrics that make sense to a financial controller. A CEO needs to know whether to hire, whether to expand, whether to slow down. Those are different questions.</p>
+      <div style="margin-top:2rem;">
+        <div class="insight-meta">COMING SOON · COSMOSCENERY ANALYTICS</div>
+      </div>
+    </div>
+    <div class="insight-list">
+      <div class="insight-item">
+        <div class="insight-item-tag">ESG</div>
+        <h4>ESG Reporting for SMEs: What Investors Actually Want to See</h4>
+        <div class="insight-item-date">COMING SOON</div>
+      </div>
+      <div class="insight-item">
+        <div class="insight-item-tag">Operations</div>
+        <h4>The 5 KPIs Every SME Should Be Tracking (But Most Don't)</h4>
+        <div class="insight-item-date">COMING SOON</div>
+      </div>
+      <div class="insight-item">
+        <div class="insight-item-tag">Data Strategy</div>
+        <h4>From Excel Chaos to Operational Intelligence: A 90-Day Roadmap</h4>
+        <div class="insight-item-date">COMING SOON</div>
+      </div>
+      <div class="insight-item">
+        <div class="insight-item-tag">AI & Ops</div>
+        <h4>How AI Agents Are Changing Operations Management in 2026</h4>
+        <div class="insight-item-date">COMING SOON</div>
+      </div>
+      <div class="insight-item">
+        <div class="insight-item-tag">Strategy</div>
+        <h4>Why Process Documentation Is Your Most Undervalued Asset</h4>
+        <div class="insight-item-date">COMING SOON</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════ CONTACT ═══════════════════════════════ -->
+<section id="contact">
+  <div class="contact-grid">
+    <div class="contact-left">
+      <div class="section-tag">// Contact</div>
+      <h1>Let's talk about <em>your operations.</em></h1>
+      <p>Whether you're an SME looking to build your first real KPI system, a consultancy needing senior operational expertise, or a software firm looking for a reliable subcontract partner — start here.</p>
+      <div class="contact-info">
+        <div class="contact-info-item">
+          <span class="contact-info-label">Email</span>
+          <span>suzanab@cosmoscenery.com</span>
+        </div>
+        <div class="contact-info-item">
+          <span class="contact-info-label">Phone</span>
+          <span>+351 937 364 795</span>
+        </div>
+        <div class="contact-info-item">
+          <span class="contact-info-label">Location</span>
+          <span>Porto, Portugal · Remote across Europe</span>
+        </div>
+        <div class="contact-info-item">
+          <span class="contact-info-label">LinkedIn</span>
+          <span>linkedin.com/in/suzanaalipio</span>
+        </div>
+        <div class="contact-info-item">
+          <span class="contact-info-label">Response</span>
+          <span>Within 1 business day</span>
+        </div>
+      </div>
+    </div>
+    <div class="contact-form">
+      <div class="form-group">
+        <label>Your Name</label>
+        <input type="text" placeholder="Full name">
+      </div>
+      <div class="form-group">
+        <label>Company</label>
+        <input type="text" placeholder="Company or organisation">
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" placeholder="your@email.com">
+      </div>
+      <div class="form-group">
+        <label>I'm interested in</label>
+        <select>
+          <option value="">Select a service</option>
+          <option>Operational Consulting (SME)</option>
+          <option>BI & Dashboard Implementation</option>
+          <option>ESG Reporting</option>
+          <option>Subcontracting / Partnership</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Tell me about your challenge</label>
+        <textarea placeholder="Briefly describe what you're working on or trying to solve..."></textarea>
+      </div>
+      <button class="btn-primary" style="width:100%; padding: 1rem;">Send Message →</button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">Cosmoscenery Analytics</div>
+  <ul class="footer-links">
+    <li><a href="#" onclick="show('about')">About</a></li>
+    <li><a href="#" onclick="show('services')">Services</a></li>
+    <li><a href="#" onclick="show('cases')">Case Studies</a></li>
+    <li><a href="#" onclick="show('insights')">Insights</a></li>
+    <li><a href="#" onclick="show('contact')">Contact</a></li>
+  </ul>
+  <div class="footer-copy">© 2026 COSMOSCENERY ANALYTICS · PORTO, PORTUGAL</div>
+</footer>
+
+<script>
+  function show(id) {
+    document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+    const target = document.getElementById(id);
+    if (target) {
+      target.classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
+</script>
 </body>
 </html>
