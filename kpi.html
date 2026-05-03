@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KPI Framework — Cosmoscenery Analytics</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0A0A0B;
+    --white: #F5F4F0;
+    --accent: #C8F03C;
+    --accent2: #3CF0C8;
+    --mid: #1A1A1E;
+    --muted: #6B6B72;
+    --border: rgba(255,255,255,0.08);
+    --serif: 'DM Serif Display', serif;
+    --sans: 'DM Sans', sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--black); color: var(--white); font-family: var(--sans); font-size: 16px; line-height: 1.6; overflow-x: hidden; }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.5rem 4rem;
+    background: rgba(10,10,11,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo { font-family: var(--mono); font-size: 0.85rem; letter-spacing: 0.15em; color: var(--accent); text-transform: uppercase; text-decoration: none; }
+  .nav-cta { background: var(--accent); color: var(--black); padding: 0.5rem 1.25rem; border-radius: 2px; font-weight: 600; font-size: 0.85rem; text-decoration: none; transition: background 0.2s; }
+  .nav-cta:hover { background: var(--accent2); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 8rem 4rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -200px; right: -200px;
+    width: 600px; height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(200,240,60,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-content { max-width: 800px; }
+
+  .hero-tag { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.2em; color: var(--accent); text-transform: uppercase; margin-bottom: 2rem; opacity: 0; animation: fadeUp 0.8s 0.2s forwards; }
+
+  .hero-h1 { font-family: var(--serif); font-size: clamp(3rem, 5vw, 5.5rem); line-height: 1.05; letter-spacing: -0.02em; margin-bottom: 2rem; opacity: 0; animation: fadeUp 0.8s 0.4s forwards; }
+  .hero-h1 em { font-style: italic; color: var(--accent); }
+
+  .hero-sub { font-size: 1.15rem; color: rgba(245,244,240,0.65); max-width: 600px; line-height: 1.75; margin-bottom: 3rem; opacity: 0; animation: fadeUp 0.8s 0.6s forwards; }
+
+  .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; opacity: 0; animation: fadeUp 0.8s 0.8s forwards; }
+
+  .btn-primary { background: var(--accent); color: var(--black); padding: 0.9rem 2rem; border: none; border-radius: 2px; font-family: var(--sans); font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.2s; letter-spacing: 0.03em; text-decoration: none; display: inline-block; }
+  .btn-primary:hover { background: var(--accent2); transform: translateY(-1px); }
+  .btn-secondary { background: transparent; color: var(--white); padding: 0.9rem 2rem; border: 1px solid rgba(255,255,255,0.2); border-radius: 2px; font-family: var(--sans); font-size: 0.9rem; font-weight: 500; cursor: pointer; transition: all 0.2s; text-decoration: none; display: inline-block; }
+  .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* PROBLEM SECTION */
+  .problem { padding: 6rem 4rem; background: var(--mid); }
+  .problem-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; max-width: 1200px; margin: 0 auto; }
+  .problem-left h2 { font-family: var(--serif); font-size: clamp(2rem, 3vw, 2.75rem); line-height: 1.15; margin-bottom: 1.5rem; }
+  .problem-left h2 em { font-style: italic; color: var(--accent); }
+  .problem-left p { color: rgba(245,244,240,0.6); font-size: 1rem; line-height: 1.8; margin-bottom: 1rem; }
+  .problem-stats { display: flex; flex-direction: column; gap: 1px; background: var(--border); }
+  .problem-stat { background: var(--black); padding: 2rem; }
+  .problem-stat-num { font-family: var(--serif); font-size: 3rem; color: var(--accent); line-height: 1; margin-bottom: 0.5rem; }
+  .problem-stat-label { font-size: 0.85rem; color: rgba(245,244,240,0.55); line-height: 1.5; }
+
+  /* WHAT IS */
+  .what-is { padding: 6rem 4rem; }
+  .section-tag { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.2em; color: var(--accent); text-transform: uppercase; margin-bottom: 1rem; }
+  .what-is-header { max-width: 700px; margin: 0 auto 4rem; text-align: center; }
+  .what-is-header h2 { font-family: var(--serif); font-size: clamp(2rem, 3.5vw, 3rem); line-height: 1.15; margin-bottom: 1.5rem; }
+  .what-is-header h2 em { font-style: italic; color: var(--accent); }
+  .what-is-header p { color: rgba(245,244,240,0.6); font-size: 1rem; line-height: 1.8; }
+
+  .pillars { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); }
+  .pillar { background: var(--black); padding: 3rem; transition: background 0.3s; }
+  .pillar:hover { background: var(--mid); }
+  .pillar-num { font-family: var(--mono); font-size: 0.65rem; color: var(--accent); letter-spacing: 0.2em; margin-bottom: 1.5rem; }
+  .pillar h3 { font-family: var(--serif); font-size: 1.4rem; margin-bottom: 1rem; }
+  .pillar p { color: rgba(245,244,240,0.55); font-size: 0.88rem; line-height: 1.75; }
+
+  /* KPI EXAMPLES */
+  .kpi-examples { padding: 6rem 4rem; background: var(--mid); }
+  .kpi-examples-header { max-width: 700px; margin-bottom: 4rem; }
+  .kpi-examples-header h2 { font-family: var(--serif); font-size: clamp(2rem, 3.5vw, 3rem); line-height: 1.15; margin-bottom: 1.5rem; }
+  .kpi-examples-header h2 em { font-style: italic; color: var(--accent); }
+  .kpi-examples-header p { color: rgba(245,244,240,0.6); font-size: 1rem; line-height: 1.75; }
+
+  .kpi-tabs { display: flex; gap: 1px; background: var(--border); margin-bottom: 1px; }
+  .kpi-tab { background: var(--black); padding: 1rem 2rem; font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.1em; color: var(--muted); text-transform: uppercase; cursor: pointer; transition: all 0.2s; border: none; }
+  .kpi-tab.active { background: var(--accent); color: var(--black); }
+  .kpi-tab:hover:not(.active) { background: var(--mid); color: var(--white); }
+
+  .kpi-panel { display: none; background: var(--black); padding: 3rem; }
+  .kpi-panel.active { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+
+  .kpi-card { background: var(--mid); padding: 1.75rem; border-left: 2px solid var(--accent); }
+  .kpi-card-name { font-family: var(--serif); font-size: 1.1rem; margin-bottom: 0.5rem; }
+  .kpi-card-formula { font-family: var(--mono); font-size: 0.7rem; color: var(--accent2); margin-bottom: 0.75rem; }
+  .kpi-card-desc { font-size: 0.82rem; color: rgba(245,244,240,0.55); line-height: 1.6; }
+
+  /* PROCESS */
+  .process { padding: 6rem 4rem; }
+  .process-header { max-width: 700px; margin-bottom: 4rem; }
+  .process-header h2 { font-family: var(--serif); font-size: clamp(2rem, 3.5vw, 3rem); line-height: 1.15; margin-bottom: 1.5rem; }
+  .process-header h2 em { font-style: italic; color: var(--accent); }
+
+  .process-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); }
+  .process-step { background: var(--black); padding: 2.5rem; }
+  .step-num { font-family: var(--mono); font-size: 0.65rem; color: var(--accent); letter-spacing: 0.15em; margin-bottom: 1rem; }
+  .process-step h4 { font-size: 1rem; font-weight: 600; margin-bottom: 0.75rem; }
+  .process-step p { font-size: 0.82rem; color: var(--muted); line-height: 1.65; }
+
+  /* RESULTS */
+  .results { padding: 6rem 4rem; background: var(--mid); }
+  .results-header { max-width: 700px; margin-bottom: 4rem; }
+  .results-header h2 { font-family: var(--serif); font-size: clamp(2rem, 3.5vw, 3rem); line-height: 1.15; margin-bottom: 1.5rem; }
+  .results-header h2 em { font-style: italic; color: var(--accent); }
+
+  .results-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); }
+  .result-item { background: var(--mid); padding: 3rem; }
+  .result-num { font-family: var(--serif); font-size: 3.5rem; color: var(--accent); line-height: 1; margin-bottom: 0.5rem; }
+  .result-label { font-size: 0.88rem; color: rgba(245,244,240,0.6); line-height: 1.5; }
+
+  /* CTA */
+  .cta { padding: 8rem 4rem; text-align: center; position: relative; overflow: hidden; }
+  .cta::before { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 800px; height: 800px; border-radius: 50%; background: radial-gradient(circle, rgba(200,240,60,0.05) 0%, transparent 70%); pointer-events: none; }
+  .cta h2 { font-family: var(--serif); font-size: clamp(2.5rem, 4vw, 4rem); line-height: 1.1; margin-bottom: 1.5rem; position: relative; }
+  .cta h2 em { font-style: italic; color: var(--accent); }
+  .cta p { color: rgba(245,244,240,0.6); font-size: 1.1rem; line-height: 1.75; max-width: 600px; margin: 0 auto 3rem; position: relative; }
+  .cta-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; position: relative; }
+
+  /* FOOTER */
+  footer { background: var(--mid); padding: 3rem 4rem; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+  .footer-logo { font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.15em; color: var(--accent); text-transform: uppercase; text-decoration: none; }
+  .footer-links { display: flex; gap: 2rem; list-style: none; }
+  .footer-links a { color: var(--muted); text-decoration: none; font-size: 0.8rem; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--white); }
+  .footer-copy { font-family: var(--mono); font-size: 0.65rem; color: var(--muted); letter-spacing: 0.1em; }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+  @media (max-width: 900px) {
+    nav { padding: 1.25rem 1.5rem; }
+    .hero, .problem, .what-is, .kpi-examples, .process, .results, .cta { padding: 6rem 1.5rem 4rem; }
+    .problem-grid, .pillars, .results-grid { grid-template-columns: 1fr; }
+    .process-steps { grid-template-columns: repeat(2, 1fr); }
+    .kpi-panel.active { grid-template-columns: 1fr; }
+    .kpi-tabs { flex-wrap: wrap; }
+    footer { flex-direction: column; align-items: flex-start; padding: 2rem 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="https://cosmoscenery.com" class="nav-logo">Cosmoscenery Analytics</a>
+  <a href="https://cosmoscenery.com/#contact" class="nav-cta">Let's Talk</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-tag">// KPI Framework Design</div>
+    <h1 class="hero-h1">Stop guessing.<br><em>Start measuring.</em></h1>
+    <p class="hero-sub">Most companies have data. Few have the right metrics. We design KPI frameworks that give your management team the clarity to make faster, better decisions — every single day.</p>
+    <div class="hero-btns">
+      <a href="mailto:suzanab@cosmoscenery.com" class="btn-primary">Book a Discovery Call →</a>
+      <a href="https://cosmoscenery.com" class="btn-secondary">Back to Main Site</a>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section class="problem">
+  <div class="problem-grid">
+    <div class="problem-left">
+      <div class="section-tag">// The Problem</div>
+      <h2>Your team is busy.<br><em>But are they moving in the right direction?</em></h2>
+      <p>Most SMEs run on gut instinct and lagging indicators. By the time you realise something is wrong, the damage is done — a client is lost, a project is over budget, a team is burning out.</p>
+      <p>A well-designed KPI framework changes this. It gives you early warning signals, clear accountability, and the confidence to act before problems escalate.</p>
+    </div>
+    <div class="problem-stats">
+      <div class="problem-stat">
+        <div class="problem-stat-num">73%</div>
+        <div class="problem-stat-label">of SMEs track KPIs inconsistently or not at all — leaving critical decisions to instinct</div>
+      </div>
+      <div class="problem-stat">
+        <div class="problem-stat-num">4×</div>
+        <div class="problem-stat-label">faster decision-making in companies with structured performance measurement systems</div>
+      </div>
+      <div class="problem-stat">
+        <div class="problem-stat-num">90</div>
+        <div class="problem-stat-label">days to full operational clarity — from diagnostic to live dashboard</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT IS -->
+<section class="what-is">
+  <div class="what-is-header">
+    <div class="section-tag">// What We Build</div>
+    <h2>A KPI framework built around<br><em>how you actually decide.</em></h2>
+    <p>Not a generic scorecard. Not industry templates. A measurement system designed around your strategy, your team, and the decisions that actually matter in your business.</p>
+  </div>
+  <div class="pillars">
+    <div class="pillar">
+      <div class="pillar-num">01 / STRATEGY ALIGNMENT</div>
+      <h3>Metrics That Matter</h3>
+      <p>We start with your strategic objectives — not with data. Every KPI is traced back to a decision that someone in your organisation needs to make. If it doesn't drive action, it doesn't belong in your dashboard.</p>
+    </div>
+    <div class="pillar">
+      <div class="pillar-num">02 / OPERATIONAL VISIBILITY</div>
+      <h3>Leading Indicators</h3>
+      <p>Most companies track results. We build systems that track the drivers behind results — so you can intervene early, before performance drops show up in your P&L.</p>
+    </div>
+    <div class="pillar">
+      <div class="pillar-num">03 / ACCOUNTABILITY</div>
+      <h3>Ownership by Design</h3>
+      <p>Every KPI has an owner. Every owner has a target. Every target has a review cadence. We build the governance structure that makes measurement stick — not just for the first month, but permanently.</p>
+    </div>
+  </div>
+</section>
+
+<!-- KPI EXAMPLES -->
+<section class="kpi-examples">
+  <div class="kpi-examples-header">
+    <div class="section-tag">// KPI Library</div>
+    <h2>Examples by <em>business area.</em></h2>
+    <p>These are illustrative examples of the KPIs we design and implement. Your framework will be tailored to your specific strategy, sector, and management needs.</p>
+  </div>
+
+  <div class="kpi-tabs">
+    <button class="kpi-tab active" onclick="showTab('operations')">Operations</button>
+    <button class="kpi-tab" onclick="showTab('financial')">Financial</button>
+    <button class="kpi-tab" onclick="showTab('commercial')">Commercial</button>
+    <button class="kpi-tab" onclick="showTab('esg')">ESG</button>
+    <button class="kpi-tab" onclick="showTab('people')">People</button>
+  </div>
+
+  <div id="operations" class="kpi-panel active">
+    <div class="kpi-card">
+      <div class="kpi-card-name">On-Time Delivery Rate</div>
+      <div class="kpi-card-formula">Orders delivered on time / Total orders × 100</div>
+      <div class="kpi-card-desc">Measures operational reliability. A leading indicator of client satisfaction and repeat business risk.</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-card-name">Process Cycle Time</div>
+      <div class="kpi-card-formula">End date − Start date (average across processes)</div>
+      <div class="kpi-card-desc">Tracks how long key operational processes take. Reduction signals efficiency gains and capacity improvements.</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-card-name">Defect / Error Rate</div>
+      <div class="kpi-card-formula">Defective outputs / Total outputs × 100</div>
+      <div class="kpi-card-desc">Quality control indicator. High rates signal process breakdowns before they reach clients.</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-card-name">Capacity Utilisation</div>
+      <div class="kpi-card-formula">Actual output / Maximum possible output × 100</div>
+      <div class="kpi-card-desc">Identifies underutilised or overloaded resources — essential for hiring and investment decisions.</div>
+    </div>
+  </div>
+
+  <div id="financial" class="kpi-panel">
+    <div class="kpi-card">
+      <div class="kpi-card-name">Gross Margin</div>
+      <div class="kpi-card-formula">(Revenue − COGS) / Revenue × 100</div>
+      <div class="kpi-card-desc">Core profitability indicator. Tracked by product line or service to identify high and low performers.</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-card-name">Cash Conversion Cycle</div>
+      <div class="kpi-card-formula">DIO + DSO − DPO</div>
+      <div class="kpi-card-desc">Measures how efficiently working capital is managed. Critical for growth-stage SMEs managing cash flow.</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-card-name">Revenue per Employee</div>
+      <div class="kpi-card-formula">Total Revenue / Number of Employees</div>
+      <div class="kpi-card-desc">Productivity benchmark. Tracked over time to assess whether headcount growth is generating proportional output.</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-card-name">Budget Variance</div>
+      <div class="kpi-card-formula">(Actual − Budget) / Budget × 100</div>
+      <div class="kpi-card-desc">Early warning for cost overruns. Tracked monthly by department to maintain financial discipline.</div>
+    </div>
+  </div>
+
+  <div id="commercial" class="kpi-panel">
+    <div class="kpi-card">
+      <div class="kpi-card-name">Customer Acquisition Cost</div>
+      <div class="kpi-card-formula">Total Sales & Marketing spend / New customers acquired</div>
+      <div class="kpi-card-desc">Measures efficiency of commercial investment. Compared against LTV to assess growth sustainability.</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-card-name">Client Retention Rate</div>
+      <div class="kpi-card-formula">(Clients at end − New clients) / Clients at start × 100</div>
+      <div class="kpi-card-desc">Leading indicator of service quality and relationship health. More valuable than acquisition in B2B.</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-card-name">Pipeline Conversion Rate</div>
+      <div class="kpi-card-formula">Deals closed / Total pipeline opportunities × 100</div>
+      <div class="kpi-card-desc">Sales effectiveness indicator. Tracked by stage to identify where deals are being lost.</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-card-name">Net Revenue Retention</div>
+      <div class="kpi-card-formula">(Starting MRR + Expansion − Churn) / Starting MRR × 100</div>
+      <div class="kpi-card-desc">Growth quality metric. Above 100% means existing clients drive revenue growth without new acquisition.</div>
+    </div>
+  </div>
+
+  <div id="esg" class="kpi-panel">
+    <div class="kpi-card">
+      <div class="kpi-card-name">Carbon Intensity</div>
+      <div class="kpi-card-formula">Total CO₂e emissions / Revenue (€M)</div>
+      <div class="kpi-card-desc">Normalised environmental performance. Required for CSRD reporting and investor ESG assessments.</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-card-name">Energy Consumption per Unit</div>
+      <div class="kpi-card-formula">Total kWh / Units produced or services delivered</div>
+      <div class="kpi-card-desc">Operational efficiency and sustainability indicator. Tracked to identify reduction opportunities.</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-card-name">Gender Pay Gap</div>
+      <div class="kpi-card-formula">Avg male salary − Avg female salary / Avg male salary × 100</div>
+      <div class="kpi-card-desc">Social equity metric. Increasingly required by investors, regulators, and public funding bodies.</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-card-name">Supplier Sustainability Score</div>
+      <div class="kpi-card-formula">Weighted average of supplier ESG assessments</div>
+      <div class="kpi-card-desc">Supply chain risk metric. Essential for companies with Scope 3 reporting obligations.</div>
+    </div>
+  </div>
+
+  <div id="people" class="kpi-panel">
+    <div class="kpi-card">
+      <div class="kpi-card-name">Employee Net Promoter Score</div>
+      <div class="kpi-card-formula">% Promoters − % Detractors</div>
+      <div class="kpi-card-desc">Culture and engagement indicator. Strong predictor of retention, productivity, and client satisfaction.</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-card-name">Voluntary Turnover Rate</div>
+      <div class="kpi-card-formula">Voluntary exits / Avg headcount × 100 (annualised)</div>
+      <div class="kpi-card-desc">Talent retention indicator. High rates signal management, compensation, or culture issues before they escalate.</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-card-name">Training Hours per Employee</div>
+      <div class="kpi-card-formula">Total training hours / Total employees</div>
+      <div class="kpi-card-desc">Capability development metric. Linked to innovation capacity and long-term competitiveness.</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-card-name">Absenteeism Rate</div>
+      <div class="kpi-card-formula">Days absent / Total working days × 100</div>
+      <div class="kpi-card-desc">Wellbeing and engagement proxy. Early signal of burnout or management issues before they affect output.</div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="process">
+  <div class="process-header">
+    <div class="section-tag">// How It Works</div>
+    <h2>From first conversation<br><em>to live dashboard.</em></h2>
+  </div>
+  <div class="process-steps">
+    <div class="process-step">
+      <div class="step-num">STEP 01</div>
+      <h4>Strategic Alignment</h4>
+      <p>We start with your business objectives — not your data. What decisions does your leadership team need to make? What information would change how they act?</p>
+    </div>
+    <div class="process-step">
+      <div class="step-num">STEP 02</div>
+      <h4>KPI Architecture</h4>
+      <p>We design your KPI framework — selecting the right metrics, defining formulas, setting targets, and assigning ownership across the organisation.</p>
+    </div>
+    <div class="process-step">
+      <div class="step-num">STEP 03</div>
+      <h4>Dashboard Build</h4>
+      <p>We implement your KPIs in Power BI or Looker Studio — automated, live, and built for daily management use. No more manual Excel reports.</p>
+    </div>
+    <div class="process-step">
+      <div class="step-num">STEP 04</div>
+      <h4>Embed & Sustain</h4>
+      <p>We train your team, document everything, and provide 30 days of post-delivery support. The system runs without us — that's the point.</p>
+    </div>
+  </div>
+</section>
+
+<!-- RESULTS -->
+<section class="results">
+  <div class="results-header">
+    <div class="section-tag">// Results</div>
+    <h2>What our clients<br><em>achieve.</em></h2>
+  </div>
+  <div class="results-grid">
+    <div class="result-item">
+      <div class="result-num">99%</div>
+      <div class="result-label">Project approval rate across 500+ companies supported through structured performance frameworks</div>
+    </div>
+    <div class="result-item">
+      <div class="result-num">90</div>
+      <div class="result-label">Days from engagement start to full operational visibility — KPIs live, dashboards automated</div>
+    </div>
+    <div class="result-item">
+      <div class="result-num">€40M+</div>
+      <div class="result-label">In managed funding overseen through KPI-driven operational reporting systems</div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <h2>Ready to know exactly<br><em>how your business is performing?</em></h2>
+  <p>Book a 30-minute discovery call. We'll map your current measurement gaps and show you what a KPI framework designed for your business would look like.</p>
+  <div class="cta-btns">
+    <a href="mailto:suzanab@cosmoscenery.com" class="btn-primary">Book Discovery Call →</a>
+    <a href="https://cosmoscenery.com" class="btn-secondary">Explore All Services</a>
+  </div>
+</section>
+
+<footer>
+  <a href="https://cosmoscenery.com" class="footer-logo">Cosmoscenery Analytics</a>
+  <ul class="footer-links">
+    <li><a href="https://cosmoscenery.com">Home</a></li>
+    <li><a href="https://cosmoscenery.com/#about">About</a></li>
+    <li><a href="https://cosmoscenery.com/#services">Services</a></li>
+    <li><a href="https://cosmoscenery.com/#contact">Contact</a></li>
+  </ul>
+  <div class="footer-copy">© 2026 COSMOSCENERY ANALYTICS · PORTO, PORTUGAL</div>
+</footer>
+
+<script>
+  function showTab(tab) {
+    document.querySelectorAll('.kpi-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.kpi-panel').forEach(p => p.classList.remove('active'));
+    document.getElementById(tab).classList.add('active');
+    event.target.classList.add('active');
+  }
+</script>
+
+</body>
+</html>

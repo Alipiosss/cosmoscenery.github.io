@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ESG Reporting — Cosmoscenery Analytics</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0A0A0B;
+    --white: #F5F4F0;
+    --accent: #C8F03C;
+    --accent2: #3CF0C8;
+    --mid: #1A1A1E;
+    --muted: #6B6B72;
+    --border: rgba(255,255,255,0.08);
+    --serif: 'DM Serif Display', serif;
+    --sans: 'DM Sans', sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--black); color: var(--white); font-family: var(--sans); font-size: 16px; line-height: 1.6; overflow-x: hidden; }
+
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.5rem 4rem;
+    background: rgba(10,10,11,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo { font-family: var(--mono); font-size: 0.85rem; letter-spacing: 0.15em; color: var(--accent); text-transform: uppercase; text-decoration: none; }
+  .nav-cta { background: var(--accent); color: var(--black); padding: 0.5rem 1.25rem; border-radius: 2px; font-weight: 600; font-size: 0.85rem; text-decoration: none; transition: background 0.2s; }
+  .nav-cta:hover { background: var(--accent2); }
+
+  .btn-primary { background: var(--accent); color: var(--black); padding: 0.9rem 2rem; border: none; border-radius: 2px; font-family: var(--sans); font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.2s; letter-spacing: 0.03em; text-decoration: none; display: inline-block; }
+  .btn-primary:hover { background: var(--accent2); transform: translateY(-1px); }
+  .btn-secondary { background: transparent; color: var(--white); padding: 0.9rem 2rem; border: 1px solid rgba(255,255,255,0.2); border-radius: 2px; font-family: var(--sans); font-size: 0.9rem; font-weight: 500; cursor: pointer; transition: all 0.2s; text-decoration: none; display: inline-block; }
+  .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+  .section-tag { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.2em; color: var(--accent); text-transform: uppercase; margin-bottom: 1rem; }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding-top: 5rem;
+  }
+
+  .hero-left {
+    padding: 8rem 4rem 6rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .hero-tag { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.2em; color: var(--accent2); text-transform: uppercase; margin-bottom: 2rem; opacity: 0; animation: fadeUp 0.8s 0.2s forwards; }
+  .hero-h1 { font-family: var(--serif); font-size: clamp(3rem, 4.5vw, 5rem); line-height: 1.05; letter-spacing: -0.02em; margin-bottom: 2rem; opacity: 0; animation: fadeUp 0.8s 0.4s forwards; }
+  .hero-h1 em { font-style: italic; color: var(--accent); }
+  .hero-sub { font-size: 1.1rem; color: rgba(245,244,240,0.65); max-width: 480px; line-height: 1.75; margin-bottom: 3rem; opacity: 0; animation: fadeUp 0.8s 0.6s forwards; }
+  .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; opacity: 0; animation: fadeUp 0.8s 0.8s forwards; }
+
+  .hero-right {
+    background: var(--mid);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 4rem;
+    gap: 1px;
+  }
+
+  .urgency-item {
+    background: var(--black);
+    padding: 2rem;
+    border-left: 3px solid transparent;
+    transition: border-color 0.3s;
+  }
+  .urgency-item:hover { border-left-color: var(--accent); }
+  .urgency-year { font-family: var(--mono); font-size: 0.65rem; color: var(--accent2); letter-spacing: 0.15em; margin-bottom: 0.5rem; }
+  .urgency-title { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.4rem; }
+  .urgency-desc { font-size: 0.8rem; color: var(--muted); line-height: 1.55; }
+
+  /* WHY NOW */
+  .why-now { padding: 6rem 4rem; background: var(--mid); }
+  .why-now-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; max-width: 1200px; margin: 0 auto; }
+  .why-now-left h2 { font-family: var(--serif); font-size: clamp(2rem, 3vw, 2.75rem); line-height: 1.15; margin-bottom: 1.5rem; }
+  .why-now-left h2 em { font-style: italic; color: var(--accent); }
+  .why-now-left p { color: rgba(245,244,240,0.6); font-size: 1rem; line-height: 1.8; margin-bottom: 1rem; }
+  .why-now-stats { display: flex; flex-direction: column; gap: 1px; }
+  .why-stat { background: var(--black); padding: 2rem; display: flex; gap: 1.5rem; align-items: flex-start; }
+  .why-stat-num { font-family: var(--serif); font-size: 2.5rem; color: var(--accent); line-height: 1; flex-shrink: 0; }
+  .why-stat-text { font-size: 0.85rem; color: rgba(245,244,240,0.6); line-height: 1.6; padding-top: 0.25rem; }
+
+  /* PILLARS */
+  .pillars-section { padding: 6rem 4rem; }
+  .pillars-header { max-width: 700px; margin-bottom: 4rem; }
+  .pillars-header h2 { font-family: var(--serif); font-size: clamp(2rem, 3.5vw, 3rem); line-height: 1.15; margin-bottom: 1.5rem; }
+  .pillars-header h2 em { font-style: italic; color: var(--accent); }
+  .pillars-header p { color: rgba(245,244,240,0.6); font-size: 1rem; line-height: 1.75; }
+
+  .esg-pillars { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); }
+  .esg-pillar { padding: 3rem; transition: background 0.3s; }
+  .esg-pillar:nth-child(1) { background: rgba(200,240,60,0.05); }
+  .esg-pillar:nth-child(2) { background: rgba(60,240,200,0.05); }
+  .esg-pillar:nth-child(3) { background: rgba(200,240,60,0.03); }
+  .esg-pillar:hover { background: var(--mid); }
+  .esg-pillar-letter { font-family: var(--serif); font-size: 5rem; line-height: 1; color: var(--accent); opacity: 0.2; margin-bottom: 1rem; }
+  .esg-pillar h3 { font-family: var(--serif); font-size: 1.5rem; margin-bottom: 1rem; }
+  .esg-pillar-items { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+  .esg-pillar-items li { font-size: 0.85rem; color: rgba(245,244,240,0.6); display: flex; gap: 0.75rem; align-items: flex-start; }
+  .esg-pillar-items li::before { content: '→'; color: var(--accent); font-family: var(--mono); flex-shrink: 0; }
+
+  /* WHAT WE DELIVER */
+  .deliverables { padding: 6rem 4rem; background: var(--mid); }
+  .deliverables-header { max-width: 700px; margin-bottom: 4rem; }
+  .deliverables-header h2 { font-family: var(--serif); font-size: clamp(2rem, 3.5vw, 3rem); line-height: 1.15; margin-bottom: 1.5rem; }
+  .deliverables-header h2 em { font-style: italic; color: var(--accent); }
+
+  .deliverables-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: var(--border); }
+  .deliverable-card { background: var(--mid); padding: 3rem; }
+  .deliverable-num { font-family: var(--mono); font-size: 0.65rem; color: var(--accent2); letter-spacing: 0.15em; margin-bottom: 1rem; }
+  .deliverable-card h3 { font-family: var(--serif); font-size: 1.35rem; margin-bottom: 1rem; }
+  .deliverable-card p { color: rgba(245,244,240,0.55); font-size: 0.88rem; line-height: 1.75; }
+
+  /* WHO IS IT FOR */
+  .who { padding: 6rem 4rem; }
+  .who-header { max-width: 700px; margin-bottom: 4rem; }
+  .who-header h2 { font-family: var(--serif); font-size: clamp(2rem, 3.5vw, 3rem); line-height: 1.15; margin-bottom: 1.5rem; }
+  .who-header h2 em { font-style: italic; color: var(--accent); }
+
+  .who-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); }
+  .who-card { background: var(--black); padding: 2.5rem; }
+  .who-card-icon { font-family: var(--mono); font-size: 0.65rem; color: var(--accent); letter-spacing: 0.15em; margin-bottom: 1rem; }
+  .who-card h4 { font-family: var(--serif); font-size: 1.2rem; margin-bottom: 0.75rem; }
+  .who-card p { font-size: 0.85rem; color: rgba(245,244,240,0.55); line-height: 1.65; }
+
+  /* PROCESS */
+  .process { padding: 6rem 4rem; background: var(--mid); }
+  .process-header { max-width: 700px; margin-bottom: 4rem; }
+  .process-header h2 { font-family: var(--serif); font-size: clamp(2rem, 3.5vw, 3rem); line-height: 1.15; margin-bottom: 1.5rem; }
+  .process-header h2 em { font-style: italic; color: var(--accent); }
+
+  .process-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); }
+  .process-step { background: var(--mid); padding: 2.5rem; }
+  .step-num { font-family: var(--mono); font-size: 0.65rem; color: var(--accent); letter-spacing: 0.15em; margin-bottom: 1rem; }
+  .process-step h4 { font-size: 1rem; font-weight: 600; margin-bottom: 0.75rem; }
+  .process-step p { font-size: 0.82rem; color: var(--muted); line-height: 1.65; }
+
+  /* CTA */
+  .cta { padding: 8rem 4rem; text-align: center; position: relative; overflow: hidden; }
+  .cta::before { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 800px; height: 800px; border-radius: 50%; background: radial-gradient(circle, rgba(60,240,200,0.05) 0%, transparent 70%); pointer-events: none; }
+  .cta h2 { font-family: var(--serif); font-size: clamp(2.5rem, 4vw, 4rem); line-height: 1.1; margin-bottom: 1.5rem; position: relative; }
+  .cta h2 em { font-style: italic; color: var(--accent); }
+  .cta p { color: rgba(245,244,240,0.6); font-size: 1.1rem; line-height: 1.75; max-width: 600px; margin: 0 auto 3rem; position: relative; }
+  .cta-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; position: relative; }
+
+  /* FOOTER */
+  footer { background: var(--mid); padding: 3rem 4rem; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+  .footer-logo { font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.15em; color: var(--accent); text-transform: uppercase; text-decoration: none; }
+  .footer-links { display: flex; gap: 2rem; list-style: none; }
+  .footer-links a { color: var(--muted); text-decoration: none; font-size: 0.8rem; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--white); }
+  .footer-copy { font-family: var(--mono); font-size: 0.65rem; color: var(--muted); letter-spacing: 0.1em; }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+  @media (max-width: 900px) {
+    nav { padding: 1.25rem 1.5rem; }
+    .hero { grid-template-columns: 1fr; }
+    .hero-left { padding: 7rem 1.5rem 3rem; }
+    .hero-right { padding: 2rem 1.5rem; }
+    .why-now, .pillars-section, .deliverables, .who, .process, .cta { padding: 4rem 1.5rem; }
+    .why-now-grid { grid-template-columns: 1fr; gap: 2rem; }
+    .esg-pillars, .who-cards { grid-template-columns: 1fr; }
+    .deliverables-grid { grid-template-columns: 1fr; }
+    .process-steps { grid-template-columns: repeat(2, 1fr); }
+    footer { flex-direction: column; align-items: flex-start; padding: 2rem 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="https://cosmoscenery.com" class="nav-logo">Cosmoscenery Analytics</a>
+  <a href="mailto:suzanab@cosmoscenery.com" class="nav-cta">Let's Talk</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-tag">// ESG Reporting & Sustainability</div>
+    <h1 class="hero-h1">ESG is no longer<br><em>optional.</em></h1>
+    <p class="hero-sub">Investors, regulators, and clients are demanding sustainability data. We help SMEs build ESG reporting frameworks that are credible, compliant, and competitively powerful.</p>
+    <div class="hero-btns">
+      <a href="mailto:suzanab@cosmoscenery.com" class="btn-primary">Book a Discovery Call →</a>
+      <a href="https://cosmoscenery.com" class="btn-secondary">Back to Main Site</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="urgency-item">
+      <div class="urgency-year">2024 → NOW</div>
+      <div class="urgency-title">CSRD — Corporate Sustainability Reporting Directive</div>
+      <div class="urgency-desc">Mandatory ESG reporting for large EU companies. SMEs in their supply chains are already being asked to provide sustainability data.</div>
+    </div>
+    <div class="urgency-item">
+      <div class="urgency-year">INVESTOR PRESSURE</div>
+      <div class="urgency-title">ESG Due Diligence is Standard</div>
+      <div class="urgency-desc">78% of institutional investors now conduct ESG assessments before committing capital. No ESG data = no investment conversation.</div>
+    </div>
+    <div class="urgency-item">
+      <div class="urgency-year">PUBLIC FUNDING</div>
+      <div class="urgency-title">Sustainability Criteria in Grant Programs</div>
+      <div class="urgency-desc">EU funding programs increasingly require ESG baseline data. Companies without it are disqualified before review.</div>
+    </div>
+    <div class="urgency-item">
+      <div class="urgency-year">TALENT & CLIENTS</div>
+      <div class="urgency-title">Sustainability as Competitive Advantage</div>
+      <div class="urgency-desc">Top talent chooses employers with credible sustainability commitments. B2B clients increasingly require supplier ESG assessments.</div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY NOW -->
+<section class="why-now">
+  <div class="why-now-grid">
+    <div class="why-now-left">
+      <div class="section-tag">// Why Act Now</div>
+      <h2>The companies that build<br><em>ESG systems today</em><br>lead tomorrow.</h2>
+      <p>ESG reporting is not just about compliance. It's about building the data infrastructure that gives you access to capital, talent, and markets that your competitors can't reach.</p>
+      <p>The window to build proactively — before it becomes mandatory — is closing. Companies that act now build a genuine competitive advantage. Those that wait face rushed compliance at higher cost.</p>
+    </div>
+    <div class="why-now-stats">
+      <div class="why-stat">
+        <div class="why-stat-num">78%</div>
+        <div class="why-stat-text">of investors conduct ESG assessments before investing — up from 34% in 2020</div>
+      </div>
+      <div class="why-stat">
+        <div class="why-stat-num">2×</div>
+        <div class="why-stat-text">higher valuation multiples for companies with strong ESG credentials in M&A transactions</div>
+      </div>
+      <div class="why-stat">
+        <div class="why-stat-num">50K+</div>
+        <div class="why-stat-text">European companies will be directly or indirectly affected by CSRD reporting requirements</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- E, S, G PILLARS -->
+<section class="pillars-section">
+  <div class="pillars-header">
+    <div class="section-tag">// The Three Pillars</div>
+    <h2>Environmental. Social. Governance.<br><em>All three. Done right.</em></h2>
+    <p>We don't cherry-pick the easy metrics. We build a complete ESG framework that covers all three dimensions — with the depth that investors and regulators actually require.</p>
+  </div>
+  <div class="esg-pillars">
+    <div class="esg-pillar">
+      <div class="esg-pillar-letter">E</div>
+      <h3>Environmental</h3>
+      <ul class="esg-pillar-items">
+        <li>Carbon footprint measurement (Scope 1, 2 & 3)</li>
+        <li>Energy consumption and renewable sourcing</li>
+        <li>Water usage and efficiency tracking</li>
+        <li>Waste generation and circular economy metrics</li>
+        <li>Biodiversity and land use impact</li>
+        <li>Climate risk assessment and scenario analysis</li>
+      </ul>
+    </div>
+    <div class="esg-pillar">
+      <div class="esg-pillar-letter">S</div>
+      <h3>Social</h3>
+      <ul class="esg-pillar-items">
+        <li>Employee health, safety, and wellbeing</li>
+        <li>Gender pay gap and diversity metrics</li>
+        <li>Training, development, and retention rates</li>
+        <li>Supply chain labour standards</li>
+        <li>Community impact and local employment</li>
+        <li>Human rights due diligence</li>
+      </ul>
+    </div>
+    <div class="esg-pillar">
+      <div class="esg-pillar-letter">G</div>
+      <h3>Governance</h3>
+      <ul class="esg-pillar-items">
+        <li>Board composition and independence</li>
+        <li>Executive compensation transparency</li>
+        <li>Anti-corruption and ethics policies</li>
+        <li>Data privacy and cybersecurity governance</li>
+        <li>Stakeholder engagement processes</li>
+        <li>Sustainability strategy and accountability</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- DELIVERABLES -->
+<section class="deliverables">
+  <div class="deliverables-header">
+    <div class="section-tag">// What We Deliver</div>
+    <h2>From baseline to<br><em>investor-ready report.</em></h2>
+  </div>
+  <div class="deliverables-grid">
+    <div class="deliverable-card">
+      <div class="deliverable-num">01 / BASELINE</div>
+      <h3>ESG Diagnostic & Materiality Assessment</h3>
+      <p>We map your current ESG performance, identify material topics relevant to your sector and stakeholders, and benchmark against applicable frameworks (GRI, ESRS, UN SDGs). You get a clear picture of where you stand and what matters most.</p>
+    </div>
+    <div class="deliverable-card">
+      <div class="deliverable-num">02 / FRAMEWORK</div>
+      <h3>KPI Design & Data Architecture</h3>
+      <p>We design your ESG KPI framework — selecting the right metrics, building data collection processes, and creating the measurement infrastructure that makes reporting sustainable year after year.</p>
+    </div>
+    <div class="deliverable-card">
+      <div class="deliverable-num">03 / DASHBOARD</div>
+      <h3>ESG Dashboard Implementation</h3>
+      <p>Your ESG data visualised in a live Power BI or Tableau dashboard — accessible to leadership, auditable by investors, and updateable by your team without external support.</p>
+    </div>
+    <div class="deliverable-card">
+      <div class="deliverable-num">04 / REPORT</div>
+      <h3>Sustainability Report Production</h3>
+      <p>A structured, credible sustainability report aligned with investor and regulatory expectations — ready for due diligence, grant applications, public funding bids, or voluntary disclosure.</p>
+    </div>
+  </div>
+</section>
+
+<!-- WHO IS IT FOR -->
+<section class="who">
+  <div class="who-header">
+    <div class="section-tag">// Who This Is For</div>
+    <h2>Built for companies<br><em>at a turning point.</em></h2>
+  </div>
+  <div class="who-cards">
+    <div class="who-card">
+      <div class="who-card-icon">01 / GROWTH STAGE</div>
+      <h4>SMEs Seeking Investment</h4>
+      <p>You're preparing for a funding round or approaching institutional investors. ESG data is no longer optional in due diligence — we build the framework that gets you through the door.</p>
+    </div>
+    <div class="who-card">
+      <div class="who-card-icon">02 / SUPPLY CHAIN</div>
+      <h4>Suppliers to Large Corporates</h4>
+      <p>Your clients are asking for sustainability data as part of their CSRD compliance. We build the reporting system that keeps you on their approved supplier list.</p>
+    </div>
+    <div class="who-card">
+      <div class="who-card-icon">03 / PUBLIC FUNDING</div>
+      <h4>Companies Applying for EU Grants</h4>
+      <p>Sustainability criteria are built into EU and national funding programs. We build the ESG baseline that strengthens your applications and satisfies reporting obligations.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="process">
+  <div class="process-header">
+    <div class="section-tag">// How It Works</div>
+    <h2>From first conversation<br><em>to credible ESG report.</em></h2>
+  </div>
+  <div class="process-steps">
+    <div class="process-step">
+      <div class="step-num">STEP 01</div>
+      <h4>Discovery & Scoping</h4>
+      <p>We understand your business, sector, stakeholders, and ESG objectives. We determine which frameworks apply and what level of reporting depth you need.</p>
+    </div>
+    <div class="process-step">
+      <div class="step-num">STEP 02</div>
+      <h4>Baseline Assessment</h4>
+      <p>We conduct your ESG diagnostic — mapping current performance, identifying data gaps, and completing a materiality assessment aligned with your sector.</p>
+    </div>
+    <div class="process-step">
+      <div class="step-num">STEP 03</div>
+      <h4>Framework & Dashboard</h4>
+      <p>We design your KPI framework and implement your ESG dashboard — automated, live, and built for ongoing management and reporting use.</p>
+    </div>
+    <div class="process-step">
+      <div class="step-num">STEP 04</div>
+      <h4>Report & Sustain</h4>
+      <p>We produce your sustainability report and train your team to maintain the system independently — so ESG reporting becomes part of how you operate.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <h2>ESG is coming for your business.<br><em>Get ahead of it.</em></h2>
+  <p>Book a 30-minute discovery call. We'll assess your current ESG exposure, identify the most urgent priorities, and show you what a framework built for your business would look like.</p>
+  <div class="cta-btns">
+    <a href="mailto:suzanab@cosmoscenery.com" class="btn-primary">Book Discovery Call →</a>
+    <a href="https://cosmoscenery.com" class="btn-secondary">Explore All Services</a>
+  </div>
+</section>
+
+<footer>
+  <a href="https://cosmoscenery.com" class="footer-logo">Cosmoscenery Analytics</a>
+  <ul class="footer-links">
+    <li><a href="https://cosmoscenery.com">Home</a></li>
+    <li><a href="https://cosmoscenery.com/#about">About</a></li>
+    <li><a href="https://cosmoscenery.com/#services">Services</a></li>
+    <li><a href="https://cosmoscenery.com/#contact">Contact</a></li>
+  </ul>
+  <div class="footer-copy">© 2026 COSMOSCENERY ANALYTICS · PORTO, PORTUGAL</div>
+</footer>
+
+</body>
+</html>

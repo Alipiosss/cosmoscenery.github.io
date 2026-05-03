@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Operational Consulting — Cosmoscenery Analytics</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0A0A0B;
+    --white: #F5F4F0;
+    --accent: #C8F03C;
+    --accent2: #3CF0C8;
+    --mid: #1A1A1E;
+    --muted: #6B6B72;
+    --border: rgba(255,255,255,0.08);
+    --serif: 'DM Serif Display', serif;
+    --sans: 'DM Sans', sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--black); color: var(--white); font-family: var(--sans); font-size: 16px; line-height: 1.6; overflow-x: hidden; }
+
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.5rem 4rem;
+    background: rgba(10,10,11,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo { font-family: var(--mono); font-size: 0.85rem; letter-spacing: 0.15em; color: var(--accent); text-transform: uppercase; text-decoration: none; }
+  .nav-cta { background: var(--accent); color: var(--black); padding: 0.5rem 1.25rem; border-radius: 2px; font-weight: 600; font-size: 0.85rem; text-decoration: none; transition: background 0.2s; }
+  .nav-cta:hover { background: var(--accent2); }
+
+  .btn-primary { background: var(--accent); color: var(--black); padding: 0.9rem 2rem; border: none; border-radius: 2px; font-family: var(--sans); font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.2s; letter-spacing: 0.03em; text-decoration: none; display: inline-block; }
+  .btn-primary:hover { background: var(--accent2); transform: translateY(-1px); }
+  .btn-secondary { background: transparent; color: var(--white); padding: 0.9rem 2rem; border: 1px solid rgba(255,255,255,0.2); border-radius: 2px; font-family: var(--sans); font-size: 0.9rem; font-weight: 500; cursor: pointer; transition: all 0.2s; text-decoration: none; display: inline-block; }
+  .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+  .section-tag { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.2em; color: var(--accent); text-transform: uppercase; margin-bottom: 1rem; }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    padding-top: 5rem;
+  }
+  .hero-left { padding: 8rem 4rem 6rem; display: flex; flex-direction: column; justify-content: center; }
+  .hero-tag { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.2em; color: var(--accent); text-transform: uppercase; margin-bottom: 2rem; opacity: 0; animation: fadeUp 0.8s 0.2s forwards; }
+  .hero-h1 { font-family: var(--serif); font-size: clamp(3rem, 4.5vw, 5rem); line-height: 1.05; letter-spacing: -0.02em; margin-bottom: 2rem; opacity: 0; animation: fadeUp 0.8s 0.4s forwards; }
+  .hero-h1 em { font-style: italic; color: var(--accent); }
+  .hero-sub { font-size: 1.1rem; color: rgba(245,244,240,0.65); max-width: 500px; line-height: 1.75; margin-bottom: 3rem; opacity: 0; animation: fadeUp 0.8s 0.6s forwards; }
+  .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; opacity: 0; animation: fadeUp 0.8s 0.8s forwards; }
+
+  .hero-right { background: var(--mid); padding: 6rem 3rem; display: flex; flex-direction: column; justify-content: center; gap: 2rem; }
+  .hero-credential { border-left: 2px solid var(--border); padding-left: 1.5rem; transition: border-color 0.3s; }
+  .hero-credential:hover { border-left-color: var(--accent); }
+  .hero-credential-num { font-family: var(--serif); font-size: 2.5rem; color: var(--accent); line-height: 1; margin-bottom: 0.4rem; }
+  .hero-credential-label { font-size: 0.82rem; color: rgba(245,244,240,0.55); line-height: 1.5; }
+
+  /* WHO IS THIS FOR */
+  .who { padding: 6rem 4rem; background: var(--mid); }
+  .who-header { max-width: 700px; margin-bottom: 4rem; }
+  .who-header h2 { font-family: var(--serif); font-size: clamp(2rem, 3.5vw, 3rem); line-height: 1.15; margin-bottom: 1.5rem; }
+  .who-header h2 em { font-style: italic; color: var(--accent); }
+  .who-header p { color: rgba(245,244,240,0.6); font-size: 1rem; line-height: 1.8; }
+
+  .signals { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: var(--border); }
+  .signal { background: var(--mid); padding: 2.5rem; display: flex; gap: 1.5rem; align-items: flex-start; }
+  .signal-check { color: var(--accent); font-family: var(--mono); font-size: 1rem; flex-shrink: 0; margin-top: 0.15rem; }
+  .signal-text h4 { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.4rem; }
+  .signal-text p { font-size: 0.82rem; color: var(--muted); line-height: 1.6; }
+
+  /* WHAT MAKES US DIFFERENT */
+  .different { padding: 6rem 4rem; }
+  .different-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: center; max-width: 1200px; margin: 0 auto; }
+  .different-left h2 { font-family: var(--serif); font-size: clamp(2rem, 3vw, 2.75rem); line-height: 1.15; margin-bottom: 1.5rem; }
+  .different-left h2 em { font-style: italic; color: var(--accent); }
+  .different-left p { color: rgba(245,244,240,0.6); font-size: 1rem; line-height: 1.8; margin-bottom: 1rem; }
+  .different-right { display: flex; flex-direction: column; gap: 1px; }
+  .diff-item { background: var(--mid); padding: 2rem; border-left: 2px solid var(--border); transition: border-color 0.3s; }
+  .diff-item:hover { border-left-color: var(--accent); }
+  .diff-vs { font-family: var(--mono); font-size: 0.65rem; color: var(--muted); letter-spacing: 0.1em; margin-bottom: 0.75rem; }
+  .diff-item h4 { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.4rem; color: var(--accent); }
+  .diff-item p { font-size: 0.82rem; color: rgba(245,244,240,0.55); line-height: 1.6; }
+
+  /* WHAT WE DELIVER */
+  .deliverables { padding: 6rem 4rem; background: var(--mid); }
+  .deliverables-header { max-width: 700px; margin-bottom: 4rem; }
+  .deliverables-header h2 { font-family: var(--serif); font-size: clamp(2rem, 3.5vw, 3rem); line-height: 1.15; margin-bottom: 1.5rem; }
+  .deliverables-header h2 em { font-style: italic; color: var(--accent); }
+  .deliverables-header p { color: rgba(245,244,240,0.6); font-size: 1rem; line-height: 1.75; }
+
+  .deliverables-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: var(--border); }
+  .deliverable { background: var(--mid); padding: 3rem; }
+  .deliverable-num { font-family: var(--mono); font-size: 0.65rem; color: var(--accent2); letter-spacing: 0.15em; margin-bottom: 1rem; }
+  .deliverable h3 { font-family: var(--serif); font-size: 1.35rem; margin-bottom: 1rem; }
+  .deliverable p { color: rgba(245,244,240,0.55); font-size: 0.88rem; line-height: 1.75; }
+
+  /* CASE */
+  .case { padding: 6rem 4rem; }
+  .case-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); max-width: 1200px; margin: 0 auto; }
+  .case-left { background: var(--black); padding: 4rem; }
+  .case-tag { font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.2em; color: var(--accent2); text-transform: uppercase; margin-bottom: 1.5rem; }
+  .case-left h2 { font-family: var(--serif); font-size: 1.75rem; line-height: 1.2; margin-bottom: 1.5rem; }
+  .case-left p { color: rgba(245,244,240,0.55); font-size: 0.9rem; line-height: 1.75; }
+  .case-right { background: var(--black); padding: 4rem; display: flex; flex-direction: column; justify-content: space-between; }
+  .case-metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem; }
+  .case-metric-num { font-family: var(--serif); font-size: 2.5rem; color: var(--accent); line-height: 1; margin-bottom: 0.4rem; }
+  .case-metric-label { font-size: 0.78rem; color: var(--muted); line-height: 1.4; }
+  .case-quote { padding: 1.5rem; background: rgba(200,240,60,0.05); border-left: 2px solid var(--accent); font-size: 0.88rem; color: rgba(245,244,240,0.6); font-style: italic; line-height: 1.65; }
+  .case-quote cite { display: block; margin-top: 0.75rem; font-style: normal; font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.1em; color: var(--muted); }
+
+  /* PROCESS */
+  .process { padding: 6rem 4rem; background: var(--mid); }
+  .process-header { max-width: 700px; margin-bottom: 4rem; }
+  .process-header h2 { font-family: var(--serif); font-size: clamp(2rem, 3.5vw, 3rem); line-height: 1.15; margin-bottom: 1.5rem; }
+  .process-header h2 em { font-style: italic; color: var(--accent); }
+  .process-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); }
+  .process-step { background: var(--mid); padding: 2.5rem; }
+  .step-num { font-family: var(--mono); font-size: 0.65rem; color: var(--accent); letter-spacing: 0.15em; margin-bottom: 1rem; }
+  .process-step h4 { font-size: 1rem; font-weight: 600; margin-bottom: 0.75rem; }
+  .process-step p { font-size: 0.82rem; color: var(--muted); line-height: 1.65; }
+
+  /* CTA */
+  .cta { padding: 8rem 4rem; text-align: center; position: relative; overflow: hidden; }
+  .cta::before { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 800px; height: 800px; border-radius: 50%; background: radial-gradient(circle, rgba(200,240,60,0.05) 0%, transparent 70%); pointer-events: none; }
+  .cta h2 { font-family: var(--serif); font-size: clamp(2.5rem, 4vw, 4rem); line-height: 1.1; margin-bottom: 1.5rem; position: relative; }
+  .cta h2 em { font-style: italic; color: var(--accent); }
+  .cta p { color: rgba(245,244,240,0.6); font-size: 1.1rem; line-height: 1.75; max-width: 600px; margin: 0 auto 3rem; position: relative; }
+  .cta-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; position: relative; }
+
+  /* FOOTER */
+  footer { background: var(--mid); padding: 3rem 4rem; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+  .footer-logo { font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.15em; color: var(--accent); text-transform: uppercase; text-decoration: none; }
+  .footer-links { display: flex; gap: 2rem; list-style: none; }
+  .footer-links a { color: var(--muted); text-decoration: none; font-size: 0.8rem; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--white); }
+  .footer-copy { font-family: var(--mono); font-size: 0.65rem; color: var(--muted); letter-spacing: 0.1em; }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+  @media (max-width: 900px) {
+    nav { padding: 1.25rem 1.5rem; }
+    .hero { grid-template-columns: 1fr; }
+    .hero-left { padding: 7rem 1.5rem 3rem; }
+    .hero-right { padding: 3rem 1.5rem; flex-direction: row; flex-wrap: wrap; gap: 1rem; }
+    .hero-credential { flex: 1 1 40%; }
+    .who, .different, .deliverables, .case, .process, .cta { padding: 4rem 1.5rem; }
+    .signals, .deliverables-grid { grid-template-columns: 1fr; }
+    .different-grid { grid-template-columns: 1fr; gap: 3rem; }
+    .case-inner { grid-template-columns: 1fr; }
+    .case-metrics { grid-template-columns: 1fr 1fr; }
+    .process-steps { grid-template-columns: repeat(2, 1fr); }
+    footer { flex-direction: column; align-items: flex-start; padding: 2rem 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="https://cosmoscenery.com" class="nav-logo">Cosmoscenery Analytics</a>
+  <a href="mailto:suzanab@cosmoscenery.com" class="nav-cta">Let's Talk</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-tag">// Operational Consulting for SMEs</div>
+    <h1 class="hero-h1">Your operations<br>are holding you<br><em>back.</em></h1>
+    <p class="hero-sub">We help SMEs with €1M–€20M in revenue build the operational systems, KPI frameworks, and management processes that turn a busy company into a scalable one.</p>
+    <div class="hero-btns">
+      <a href="mailto:suzanab@cosmoscenery.com" class="btn-primary">Book a Discovery Call →</a>
+      <a href="https://cosmoscenery.com" class="btn-secondary">Back to Main Site</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-credential">
+      <div class="hero-credential-num">29+</div>
+      <div class="hero-credential-label">Years of hands-on operational experience across manufacturing, entrepreneurship programs, and data-driven consulting</div>
+    </div>
+    <div class="hero-credential">
+      <div class="hero-credential-num">500+</div>
+      <div class="hero-credential-label">Companies supported through structured operational systems — from early-stage startups to national program participants</div>
+    </div>
+    <div class="hero-credential">
+      <div class="hero-credential-num">€40M+</div>
+      <div class="hero-credential-label">In managed grants and funded programs — delivered on time, on target, through rigorous operational management</div>
+    </div>
+    <div class="hero-credential">
+      <div class="hero-credential-num">99%</div>
+      <div class="hero-credential-label">Investment project approval rate — achieved through disciplined process design and quality control systems</div>
+    </div>
+  </div>
+</section>
+
+<!-- WHO IS THIS FOR -->
+<section class="who">
+  <div class="who-header">
+    <div class="section-tag">// Is This You?</div>
+    <h2>You have a growing business.<br><em>But it's growing messily.</em></h2>
+    <p>These are the signals we see in almost every SME that comes to us. If three or more of these sound familiar, you're ready for an operational transformation.</p>
+  </div>
+  <div class="signals">
+    <div class="signal">
+      <div class="signal-check">✓</div>
+      <div class="signal-text">
+        <h4>Decisions are made on instinct, not data</h4>
+        <p>Your team is experienced and talented — but management decisions are still based on gut feel because the data isn't organised enough to trust.</p>
+      </div>
+    </div>
+    <div class="signal">
+      <div class="signal-check">✓</div>
+      <div class="signal-text">
+        <h4>Processes live in people's heads</h4>
+        <p>When a key person is sick or leaves, operations slow down or break. Critical knowledge isn't documented — it's held by individuals.</p>
+      </div>
+    </div>
+    <div class="signal">
+      <div class="signal-check">✓</div>
+      <div class="signal-text">
+        <h4>Reporting takes too long and arrives too late</h4>
+        <p>Your monthly report takes a week to compile manually. By the time it's ready, the decisions it should inform have already been made — on incomplete information.</p>
+      </div>
+    </div>
+    <div class="signal">
+      <div class="signal-check">✓</div>
+      <div class="signal-text">
+        <h4>You track activity, not performance</h4>
+        <p>You know how busy everyone is. You don't know whether the business is moving in the right direction — or whether busyness is translating into results.</p>
+      </div>
+    </div>
+    <div class="signal">
+      <div class="signal-check">✓</div>
+      <div class="signal-text">
+        <h4>Investors or funders are asking for data you don't have</h4>
+        <p>A funding opportunity or investor conversation has exposed the gap between what you know about your business and what you can prove.</p>
+      </div>
+    </div>
+    <div class="signal">
+      <div class="signal-check">✓</div>
+      <div class="signal-text">
+        <h4>Growth is creating operational chaos</h4>
+        <p>The systems that worked at €2M are breaking at €8M. What got you here won't get you to the next level — and you know it.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT MAKES US DIFFERENT -->
+<section class="different">
+  <div class="different-grid">
+    <div class="different-left">
+      <div class="section-tag">// Why Us</div>
+      <h2>Senior expertise.<br><em>Not junior consultants.</em></h2>
+      <p>Most consulting firms send junior analysts to do the work while partners take the credit. We work differently — you get 29 years of direct operational experience, applied to your business from day one.</p>
+      <p>We've managed operations under real pressure — 150+ stakeholders simultaneously, €40M+ in funding, 500+ companies across national programs. We know what operational systems look like when they actually work.</p>
+    </div>
+    <div class="different-right">
+      <div class="diff-item">
+        <div class="diff-vs">OTHERS → Generic frameworks</div>
+        <h4>We → Systems built around your strategy</h4>
+        <p>No industry templates. Every KPI, every process, every dashboard is designed around the specific decisions your management team needs to make.</p>
+      </div>
+      <div class="diff-item">
+        <div class="diff-vs">OTHERS → Reports and recommendations</div>
+        <h4>We → Implementation and adoption</h4>
+        <p>We don't just diagnose. We build, implement, train, and stay until the system is running independently — without us.</p>
+      </div>
+      <div class="diff-item">
+        <div class="diff-vs">OTHERS → Technical focus</div>
+        <h4>We → Operational + analytical depth</h4>
+        <p>Rare combination: the analytical rigour of a data scientist, the strategic eye of an MBA, and the hands-on experience of nearly three decades in real operations.</p>
+      </div>
+      <div class="diff-item">
+        <div class="diff-vs">OTHERS → 6–12 month engagements</div>
+        <h4>We → Operational clarity in 90 days</h4>
+        <p>Structured 90-day engagement. Full visibility from diagnostic to live dashboard — without the open-ended retainers that drain budget without delivering results.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DELIVERABLES -->
+<section class="deliverables">
+  <div class="deliverables-header">
+    <div class="section-tag">// What's Included</div>
+    <h2>Everything your business needs<br><em>to run clearly.</em></h2>
+    <p>Our 90-day operational consulting engagement covers the full spectrum — from diagnostic to live systems, with training and support included.</p>
+  </div>
+  <div class="deliverables-grid">
+    <div class="deliverable">
+      <div class="deliverable-num">01 / DIAGNOSTIC</div>
+      <h3>Operational Diagnostic</h3>
+      <p>A structured assessment of your current state — mapping data flows, decision bottlenecks, process gaps, and measurement blind spots. Delivered as a clear diagnostic report with prioritised recommendations before any implementation begins.</p>
+    </div>
+    <div class="deliverable">
+      <div class="deliverable-num">02 / KPI FRAMEWORK</div>
+      <h3>KPI Framework Design</h3>
+      <p>A complete measurement architecture aligned to your strategy — metrics that matter, targets that challenge, and ownership structures that create accountability. Not an industry scorecard. Built for how your business actually works.</p>
+    </div>
+    <div class="deliverable">
+      <div class="deliverable-num">03 / DASHBOARD</div>
+      <h3>BI Dashboard Implementation</h3>
+      <p>Your KPIs live in Power BI or Looker Studio — automated, real-time, and built for daily management use. No more Monday morning Excel reports. No more decisions made on last month's data.</p>
+    </div>
+    <div class="deliverable">
+      <div class="deliverable-num">04 / PROCESS</div>
+      <h3>Process Documentation</h3>
+      <p>Critical operational workflows documented, standardised, and made transferable. Knowledge that lives in people's heads gets captured in systems — so the business can scale without breaking.</p>
+    </div>
+    <div class="deliverable">
+      <div class="deliverable-num">05 / ESG</div>
+      <h3>ESG Baseline & Reporting</h3>
+      <p>Sustainability data collected, structured, and reported — ready for investor due diligence, public funding applications, or regulatory compliance. Built into your operational system, not bolted on as an afterthought.</p>
+    </div>
+    <div class="deliverable">
+      <div class="deliverable-num">06 / SUPPORT</div>
+      <h3>30-Day Post-Delivery Support</h3>
+      <p>Training for your team, documentation for your systems, and 30 days of post-delivery support. The goal is a management system your team owns and operates independently — not one that requires us to maintain.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CASE STUDY -->
+<section class="case">
+  <div class="case-inner">
+    <div class="case-left">
+      <div class="case-tag">National Entrepreneurship Program · Portugal</div>
+      <h2>Managing 150+ Stakeholders Across Concurrent National Programs</h2>
+      <p>Designed and led full operational management for simultaneous national entrepreneurship programs — coordinating entrepreneurs, financial institutions, consultants, and public bodies across concurrent program cycles without service disruption.</p>
+      <p style="margin-top:1rem; color: rgba(245,244,240,0.4); font-size:0.85rem; line-height:1.7;">Challenge: Managing parallel programs with 120+ entrepreneurs per cycle, each requiring individual investment pipelines through multiple institutional channels with distinct approval criteria.</p>
+    </div>
+    <div class="case-right">
+      <div class="case-metrics">
+        <div>
+          <div class="case-metric-num">99%</div>
+          <div class="case-metric-label">Investment project approval rate through rigorous QC</div>
+        </div>
+        <div>
+          <div class="case-metric-num">500+</div>
+          <div class="case-metric-label">Companies created across program cycles</div>
+        </div>
+        <div>
+          <div class="case-metric-num">€40M+</div>
+          <div class="case-metric-label">In managed grants and subsidised funding</div>
+        </div>
+        <div>
+          <div class="case-metric-num">150+</div>
+          <div class="case-metric-label">Direct and indirect stakeholders per cycle</div>
+        </div>
+      </div>
+      <div class="case-quote">
+        "Replaced manual reporting with automated Python + Excel workflows, delivering monthly performance reports to the executive board and enabling early detection of delays across 500+ active contracts."
+        <cite>— ANJE National Programs, 2000–Present</cite>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="process">
+  <div class="process-header">
+    <div class="section-tag">// How It Works</div>
+    <h2>From first conversation<br><em>to operational clarity.</em></h2>
+  </div>
+  <div class="process-steps">
+    <div class="process-step">
+      <div class="step-num">STEP 01</div>
+      <h4>Discovery Call</h4>
+      <p>30 minutes to understand your context, identify the core problem, and determine whether we're the right fit. No obligation, no sales pitch — just an honest assessment.</p>
+    </div>
+    <div class="process-step">
+      <div class="step-num">STEP 02</div>
+      <h4>Operational Diagnostic</h4>
+      <p>Deep-dive into your data landscape, decision flows, and operational gaps. Delivered as a structured diagnostic report — with clear priorities before any implementation begins.</p>
+    </div>
+    <div class="process-step">
+      <div class="step-num">STEP 03</div>
+      <h4>Design & Build</h4>
+      <p>KPI frameworks, dashboard implementation, and process documentation — built iteratively with your team's input. You see progress throughout, not just at the end.</p>
+    </div>
+    <div class="process-step">
+      <div class="step-num">STEP 04</div>
+      <h4>Embed & Sustain</h4>
+      <p>Training, documentation, and 30-day support to ensure adoption. The system should run without us — and it will. That's how we measure success.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <h2>Your business deserves<br><em>to run as well as it performs.</em></h2>
+  <p>Book a 30-minute discovery call. We'll map your operational gaps, identify your highest-priority fix, and show you what clarity looks like for a business at your stage.</p>
+  <div class="cta-btns">
+    <a href="mailto:suzanab@cosmoscenery.com" class="btn-primary">Book Discovery Call →</a>
+    <a href="https://cosmoscenery.com" class="btn-secondary">Explore All Services</a>
+  </div>
+</section>
+
+<footer>
+  <a href="https://cosmoscenery.com" class="footer-logo">Cosmoscenery Analytics</a>
+  <ul class="footer-links">
+    <li><a href="https://cosmoscenery.com">Home</a></li>
+    <li><a href="https://cosmoscenery.com/#about">About</a></li>
+    <li><a href="https://cosmoscenery.com/#services">Services</a></li>
+    <li><a href="https://cosmoscenery.com/#contact">Contact</a></li>
+  </ul>
+  <div class="footer-copy">© 2026 COSMOSCENERY ANALYTICS · PORTO, PORTUGAL</div>
+</footer>
+
+</body>
+</html>

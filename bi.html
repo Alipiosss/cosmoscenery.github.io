@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BI & Dashboards — Cosmoscenery Analytics</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0A0A0B;
+    --white: #F5F4F0;
+    --accent: #C8F03C;
+    --accent2: #3CF0C8;
+    --mid: #1A1A1E;
+    --muted: #6B6B72;
+    --border: rgba(255,255,255,0.08);
+    --serif: 'DM Serif Display', serif;
+    --sans: 'DM Sans', sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--black); color: var(--white); font-family: var(--sans); font-size: 16px; line-height: 1.6; overflow-x: hidden; }
+
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.5rem 4rem;
+    background: rgba(10,10,11,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo { font-family: var(--mono); font-size: 0.85rem; letter-spacing: 0.15em; color: var(--accent); text-transform: uppercase; text-decoration: none; }
+  .nav-cta { background: var(--accent); color: var(--black); padding: 0.5rem 1.25rem; border-radius: 2px; font-weight: 600; font-size: 0.85rem; text-decoration: none; transition: background 0.2s; }
+  .nav-cta:hover { background: var(--accent2); }
+
+  .btn-primary { background: var(--accent); color: var(--black); padding: 0.9rem 2rem; border: none; border-radius: 2px; font-family: var(--sans); font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.2s; letter-spacing: 0.03em; text-decoration: none; display: inline-block; }
+  .btn-primary:hover { background: var(--accent2); transform: translateY(-1px); }
+  .btn-secondary { background: transparent; color: var(--white); padding: 0.9rem 2rem; border: 1px solid rgba(255,255,255,0.2); border-radius: 2px; font-family: var(--sans); font-size: 0.9rem; font-weight: 500; cursor: pointer; transition: all 0.2s; text-decoration: none; display: inline-block; }
+  .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+  .section-tag { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.2em; color: var(--accent); text-transform: uppercase; margin-bottom: 1rem; }
+
+  /* HERO */
+  .hero { min-height: 100vh; display: flex; align-items: center; padding: 8rem 4rem 4rem; position: relative; overflow: hidden; }
+  .hero::before { content: ''; position: absolute; top: -100px; right: -100px; width: 700px; height: 700px; border-radius: 50%; background: radial-gradient(circle, rgba(60,240,200,0.06) 0%, transparent 70%); pointer-events: none; }
+  .hero-content { max-width: 800px; }
+  .hero-tag { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.2em; color: var(--accent2); text-transform: uppercase; margin-bottom: 2rem; opacity: 0; animation: fadeUp 0.8s 0.2s forwards; }
+  .hero-h1 { font-family: var(--serif); font-size: clamp(3rem, 5vw, 5.5rem); line-height: 1.05; letter-spacing: -0.02em; margin-bottom: 2rem; opacity: 0; animation: fadeUp 0.8s 0.4s forwards; }
+  .hero-h1 em { font-style: italic; color: var(--accent); }
+  .hero-sub { font-size: 1.15rem; color: rgba(245,244,240,0.65); max-width: 600px; line-height: 1.75; margin-bottom: 3rem; opacity: 0; animation: fadeUp 0.8s 0.6s forwards; }
+  .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; opacity: 0; animation: fadeUp 0.8s 0.8s forwards; }
+
+  /* PROBLEM */
+  .problem { padding: 6rem 4rem; background: var(--mid); }
+  .problem-inner { max-width: 1200px; margin: 0 auto; }
+  .problem-header { max-width: 700px; margin-bottom: 4rem; }
+  .problem-header h2 { font-family: var(--serif); font-size: clamp(2rem, 3.5vw, 3rem); line-height: 1.15; margin-bottom: 1.5rem; }
+  .problem-header h2 em { font-style: italic; color: var(--accent); }
+  .problem-header p { color: rgba(245,244,240,0.6); font-size: 1rem; line-height: 1.8; }
+
+  .symptoms { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); }
+  .symptom { background: var(--mid); padding: 2.5rem; border-top: 2px solid var(--border); transition: border-color 0.3s; }
+  .symptom:hover { border-top-color: var(--accent); }
+  .symptom-icon { font-family: var(--mono); font-size: 1.5rem; color: var(--accent); margin-bottom: 1rem; opacity: 0.6; }
+  .symptom h4 { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.6rem; }
+  .symptom p { font-size: 0.82rem; color: var(--muted); line-height: 1.65; }
+
+  /* TOOLS */
+  .tools { padding: 6rem 4rem; }
+  .tools-header { max-width: 700px; margin-bottom: 4rem; }
+  .tools-header h2 { font-family: var(--serif); font-size: clamp(2rem, 3.5vw, 3rem); line-height: 1.15; margin-bottom: 1.5rem; }
+  .tools-header h2 em { font-style: italic; color: var(--accent); }
+  .tools-header p { color: rgba(245,244,240,0.6); font-size: 1rem; line-height: 1.75; }
+
+  .tools-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); }
+  .tool-card { background: var(--black); padding: 3rem; transition: background 0.3s; }
+  .tool-card:hover { background: var(--mid); }
+  .tool-name { font-family: var(--serif); font-size: 1.75rem; color: var(--accent); margin-bottom: 0.5rem; }
+  .tool-tag { font-family: var(--mono); font-size: 0.65rem; color: var(--muted); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 1.5rem; }
+  .tool-card p { color: rgba(245,244,240,0.55); font-size: 0.88rem; line-height: 1.75; margin-bottom: 1.5rem; }
+  .tool-best-for { font-family: var(--mono); font-size: 0.65rem; color: var(--accent2); letter-spacing: 0.1em; }
+
+  /* WHAT WE BUILD */
+  .builds { padding: 6rem 4rem; background: var(--mid); }
+  .builds-header { max-width: 700px; margin-bottom: 4rem; }
+  .builds-header h2 { font-family: var(--serif); font-size: clamp(2rem, 3.5vw, 3rem); line-height: 1.15; margin-bottom: 1.5rem; }
+  .builds-header h2 em { font-style: italic; color: var(--accent); }
+
+  .builds-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: var(--border); }
+  .build-card { background: var(--mid); padding: 3rem; }
+  .build-num { font-family: var(--mono); font-size: 0.65rem; color: var(--accent); letter-spacing: 0.15em; margin-bottom: 1rem; }
+  .build-card h3 { font-family: var(--serif); font-size: 1.35rem; margin-bottom: 1rem; }
+  .build-card p { color: rgba(245,244,240,0.55); font-size: 0.88rem; line-height: 1.75; margin-bottom: 1.5rem; }
+  .build-includes { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+  .build-includes li { font-size: 0.8rem; color: rgba(245,244,240,0.5); display: flex; gap: 0.75rem; }
+  .build-includes li::before { content: '→'; color: var(--accent); font-family: var(--mono); flex-shrink: 0; }
+
+  /* LIVE WORK */
+  .live-work { padding: 6rem 4rem; }
+  .live-work-header { max-width: 700px; margin-bottom: 4rem; }
+  .live-work-header h2 { font-family: var(--serif); font-size: clamp(2rem, 3.5vw, 3rem); line-height: 1.15; margin-bottom: 1.5rem; }
+  .live-work-header h2 em { font-style: italic; color: var(--accent); }
+  .live-work-header p { color: rgba(245,244,240,0.6); font-size: 1rem; line-height: 1.75; }
+
+  .dashboards-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); }
+  .dashboard-card { background: var(--black); padding: 2.5rem; display: flex; flex-direction: column; justify-content: space-between; }
+  .dashboard-tag { font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.15em; color: var(--accent2); text-transform: uppercase; margin-bottom: 1rem; }
+  .dashboard-card h3 { font-family: var(--serif); font-size: 1.2rem; line-height: 1.25; margin-bottom: 0.75rem; }
+  .dashboard-card p { color: rgba(245,244,240,0.55); font-size: 0.82rem; line-height: 1.7; margin-bottom: 1.5rem; }
+  .dashboard-link { display: inline-block; background: var(--accent); color: var(--black); padding: 0.65rem 1.25rem; border-radius: 2px; font-size: 0.82rem; font-weight: 600; text-decoration: none; transition: background 0.2s; text-align: center; }
+  .dashboard-link:hover { background: var(--accent2); }
+
+  /* PROCESS */
+  .process { padding: 6rem 4rem; background: var(--mid); }
+  .process-header { max-width: 700px; margin-bottom: 4rem; }
+  .process-header h2 { font-family: var(--serif); font-size: clamp(2rem, 3.5vw, 3rem); line-height: 1.15; margin-bottom: 1.5rem; }
+  .process-header h2 em { font-style: italic; color: var(--accent); }
+  .process-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); }
+  .process-step { background: var(--mid); padding: 2.5rem; }
+  .step-num { font-family: var(--mono); font-size: 0.65rem; color: var(--accent); letter-spacing: 0.15em; margin-bottom: 1rem; }
+  .process-step h4 { font-size: 1rem; font-weight: 600; margin-bottom: 0.75rem; }
+  .process-step p { font-size: 0.82rem; color: var(--muted); line-height: 1.65; }
+
+  /* CTA */
+  .cta { padding: 8rem 4rem; text-align: center; position: relative; overflow: hidden; }
+  .cta::before { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 800px; height: 800px; border-radius: 50%; background: radial-gradient(circle, rgba(200,240,60,0.05) 0%, transparent 70%); pointer-events: none; }
+  .cta h2 { font-family: var(--serif); font-size: clamp(2.5rem, 4vw, 4rem); line-height: 1.1; margin-bottom: 1.5rem; position: relative; }
+  .cta h2 em { font-style: italic; color: var(--accent); }
+  .cta p { color: rgba(245,244,240,0.6); font-size: 1.1rem; line-height: 1.75; max-width: 600px; margin: 0 auto 3rem; position: relative; }
+  .cta-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; position: relative; }
+
+  /* FOOTER */
+  footer { background: var(--mid); padding: 3rem 4rem; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+  .footer-logo { font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.15em; color: var(--accent); text-transform: uppercase; text-decoration: none; }
+  .footer-links { display: flex; gap: 2rem; list-style: none; }
+  .footer-links a { color: var(--muted); text-decoration: none; font-size: 0.8rem; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--white); }
+  .footer-copy { font-family: var(--mono); font-size: 0.65rem; color: var(--muted); letter-spacing: 0.1em; }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+  @media (max-width: 900px) {
+    nav { padding: 1.25rem 1.5rem; }
+    .hero, .problem, .tools, .builds, .live-work, .process, .cta { padding: 6rem 1.5rem 4rem; }
+    .symptoms, .tools-grid, .dashboards-grid { grid-template-columns: 1fr; }
+    .builds-grid { grid-template-columns: 1fr; }
+    .process-steps { grid-template-columns: repeat(2, 1fr); }
+    footer { flex-direction: column; align-items: flex-start; padding: 2rem 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="https://cosmoscenery.com" class="nav-logo">Cosmoscenery Analytics</a>
+  <a href="mailto:suzanab@cosmoscenery.com" class="nav-cta">Let's Talk</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-tag">// BI & Dashboard Implementation</div>
+    <h1 class="hero-h1">Your data is there.<br><em>Make it visible.</em></h1>
+    <p class="hero-sub">We build Power BI, Looker Studio and Tableau dashboards that your management team actually opens — because they're built around how your business works, not around what the tool can do.</p>
+    <div class="hero-btns">
+      <a href="mailto:suzanab@cosmoscenery.com" class="btn-primary">Book a Discovery Call →</a>
+      <a href="https://cosmoscenery.com" class="btn-secondary">Back to Main Site</a>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section class="problem">
+  <div class="problem-inner">
+    <div class="problem-header">
+      <div class="section-tag">// Sound Familiar?</div>
+      <h2>Most BI projects fail.<br><em>Not technically. Operationally.</em></h2>
+      <p>The dashboards get built. The data gets connected. And then six months later, nobody's looking at them. The problem isn't the tool — it's the gap between what the tool shows and what management actually needs to decide.</p>
+    </div>
+    <div class="symptoms">
+      <div class="symptom">
+        <div class="symptom-icon">◉</div>
+        <h4>The dashboard nobody opens</h4>
+        <p>Built by IT, approved by finance, ignored by everyone. When metrics don't map to actual decisions, adoption dies within weeks of launch.</p>
+      </div>
+      <div class="symptom">
+        <div class="symptom-icon">◉</div>
+        <h4>The Excel that never dies</h4>
+        <p>Someone is still manually compiling reports every Monday morning. The BI tool exists but the spreadsheet is still the source of truth.</p>
+      </div>
+      <div class="symptom">
+        <div class="symptom-icon">◉</div>
+        <h4>The data nobody trusts</h4>
+        <p>Two departments have different numbers for the same metric. Management stops using the dashboard because they can't tell which figure is right.</p>
+      </div>
+      <div class="symptom">
+        <div class="symptom-icon">◉</div>
+        <h4>The report that arrives too late</h4>
+        <p>By the time last month's performance data is ready, the decisions have already been made — on instinct, on incomplete information, on gut feel.</p>
+      </div>
+      <div class="symptom">
+        <div class="symptom-icon">◉</div>
+        <h4>The metrics nobody defined</h4>
+        <p>The dashboard has 47 charts. Nobody agreed on what "conversion" means, or whose version of "revenue" to use. It measures everything and tells you nothing.</p>
+      </div>
+      <div class="symptom">
+        <div class="symptom-icon">◉</div>
+        <h4>The tool without a owner</h4>
+        <p>The consultant who built it is gone. Nobody on the team knows how to update it. The data stops refreshing and the dashboard quietly dies.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TOOLS -->
+<section class="tools">
+  <div class="tools-header">
+    <div class="section-tag">// The Tools We Use</div>
+    <h2>The right tool for<br><em>your business.</em></h2>
+    <p>We're tool-agnostic — we recommend the platform that fits your team, your data, and your budget. Not the one we happen to know best.</p>
+  </div>
+  <div class="tools-grid">
+    <div class="tool-card">
+      <div class="tool-name">Power BI</div>
+      <div class="tool-tag">Microsoft Ecosystem</div>
+      <p>The most powerful option for companies already using Microsoft 365. Deep integration with Excel, SharePoint, and Teams. Best-in-class for complex data models and large datasets.</p>
+      <div class="tool-best-for">BEST FOR → Enterprise SMEs · Microsoft shops · Complex data</div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-name">Looker Studio</div>
+      <div class="tool-tag">Google Ecosystem · Free</div>
+      <p>Google's free BI platform. Excellent for companies using Google Analytics, Google Ads, or Google Sheets. Fast to deploy, easy for teams to access and share without licensing costs.</p>
+      <div class="tool-best-for">BEST FOR → Google users · Budget-conscious · Marketing data</div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-name">Tableau</div>
+      <div class="tool-tag">Visual Analytics Leader</div>
+      <p>The gold standard for visual data exploration. Unmatched for complex visualisations, public dashboards, and storytelling with data. Used in our own client-facing work and Tableau Public portfolio.</p>
+      <div class="tool-best-for">BEST FOR → Data storytelling · Public dashboards · ESG reporting</div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT WE BUILD -->
+<section class="builds">
+  <div class="builds-header">
+    <div class="section-tag">// What We Build</div>
+    <h2>Dashboards built for<br><em>decisions, not decoration.</em></h2>
+  </div>
+  <div class="builds-grid">
+    <div class="build-card">
+      <div class="build-num">01 / EXECUTIVE</div>
+      <h3>Executive Performance Dashboard</h3>
+      <p>A single view of business health for the leadership team — revenue, margin, headcount, client metrics, and operational KPIs in one place. Built for weekly management reviews.</p>
+      <ul class="build-includes">
+        <li>Top-line financial performance</li>
+        <li>Commercial pipeline and conversion</li>
+        <li>Operational efficiency indicators</li>
+        <li>Exception alerts and trend signals</li>
+      </ul>
+    </div>
+    <div class="build-card">
+      <div class="build-num">02 / OPERATIONAL</div>
+      <h3>Operational Control Dashboard</h3>
+      <p>Real-time visibility into day-to-day operations — process performance, capacity utilisation, quality metrics, and team productivity. Built for operational managers, not just the C-suite.</p>
+      <ul class="build-includes">
+        <li>Process cycle times and bottlenecks</li>
+        <li>Capacity and workload distribution</li>
+        <li>Quality and error rate tracking</li>
+        <li>Delivery and SLA performance</li>
+      </ul>
+    </div>
+    <div class="build-card">
+      <div class="build-num">03 / FINANCIAL</div>
+      <h3>Financial Intelligence Dashboard</h3>
+      <p>Replacing manual Excel reporting with automated financial dashboards — P&L by product line, cash flow forecasting, budget variance, and margin analysis updated in real time.</p>
+      <ul class="build-includes">
+        <li>P&L by product, service, or region</li>
+        <li>Budget vs actual variance tracking</li>
+        <li>Cash flow and working capital</li>
+        <li>Cost structure and margin analysis</li>
+      </ul>
+    </div>
+    <div class="build-card">
+      <div class="build-num">04 / ESG</div>
+      <h3>ESG & Sustainability Dashboard</h3>
+      <p>Live ESG performance tracking — carbon emissions, energy consumption, social metrics, and governance indicators — built for investor reporting, regulatory compliance, and internal accountability.</p>
+      <ul class="build-includes">
+        <li>Environmental KPIs and carbon tracking</li>
+        <li>Social metrics and workforce data</li>
+        <li>Governance indicators</li>
+        <li>Investor-ready reporting export</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- LIVE WORK -->
+<section class="live-work">
+  <div class="live-work-header">
+    <div class="section-tag">// Live Work</div>
+    <h2>See our dashboards<br><em>in action.</em></h2>
+    <p>Real analytical work built during Google's Data Analytics and Business Intelligence programs — available publicly on Tableau Public.</p>
+  </div>
+  <div class="dashboards-grid">
+    <div class="dashboard-card">
+      <div>
+        <div class="dashboard-tag">Data Analytics · TikTok</div>
+        <h3>TikTok Claims — Exploratory Data Analysis</h3>
+        <p>Structured EDA on TikTok claim datasets — identifying patterns, outliers, and data quality issues to support classification modelling decisions.</p>
+      </div>
+      <a href="https://public.tableau.com/app/profile/suzana.al.pio/viz/TikTok-EDAofClaimDataset/Story1" target="_blank" class="dashboard-link">View Dashboard →</a>
+    </div>
+    <div class="dashboard-card">
+      <div>
+        <div class="dashboard-tag">BI · Customer Service</div>
+        <h3>Google Fiber — Repeat Calls Analysis</h3>
+        <p>Dashboard tracking repeat customer service calls to identify resolution failures, peak periods, and operational improvement opportunities.</p>
+      </div>
+      <a href="https://public.tableau.com/app/profile/suzana.al.pio/viz/GoogleFiber_17704866269160/RepeatCalls" target="_blank" class="dashboard-link">View Dashboard →</a>
+    </div>
+    <div class="dashboard-card">
+      <div>
+        <div class="dashboard-tag">ESG · Sustainability</div>
+        <h3>CO₂ Emissions — Sustainability Dashboard</h3>
+        <p>Interactive ESG dashboard visualising CO₂ emissions data — aligned with sustainability reporting and ESG framework services.</p>
+      </div>
+      <a href="https://public.tableau.com/app/profile/suzana.al.pio/viz/DashboardsCO2_17304471540610/Painel1" target="_blank" class="dashboard-link">View Dashboard →</a>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="process">
+  <div class="process-header">
+    <div class="section-tag">// How It Works</div>
+    <h2>From data chaos<br><em>to operational clarity.</em></h2>
+  </div>
+  <div class="process-steps">
+    <div class="process-step">
+      <div class="step-num">STEP 01</div>
+      <h4>Requirements & Discovery</h4>
+      <p>We map the decisions your team needs to make, the data sources available, and the gaps between them. No assumptions — we start from your actual management reality.</p>
+    </div>
+    <div class="process-step">
+      <div class="step-num">STEP 02</div>
+      <h4>Data Architecture</h4>
+      <p>We design the data model, connect your sources, clean and validate the data, and build the pipeline that keeps your dashboard accurate and up to date automatically.</p>
+    </div>
+    <div class="process-step">
+      <div class="step-num">STEP 03</div>
+      <h4>Dashboard Build</h4>
+      <p>We build iteratively — showing you working versions throughout the process. You see progress, give feedback, and the final product reflects how your team actually thinks.</p>
+    </div>
+    <div class="process-step">
+      <div class="step-num">STEP 04</div>
+      <h4>Adoption & Training</h4>
+      <p>We train your team, document everything, and stay available for 30 days post-launch. The goal is a dashboard your team owns — not one they depend on us to maintain.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <h2>Your data is already there.<br><em>Let's make it work for you.</em></h2>
+  <p>Book a 30-minute discovery call. We'll map your current data landscape, identify the highest-value dashboard to build first, and show you what operational clarity looks like for your business.</p>
+  <div class="cta-btns">
+    <a href="mailto:suzanab@cosmoscenery.com" class="btn-primary">Book Discovery Call →</a>
+    <a href="https://cosmoscenery.com" class="btn-secondary">Explore All Services</a>
+  </div>
+</section>
+
+<footer>
+  <a href="https://cosmoscenery.com" class="footer-logo">Cosmoscenery Analytics</a>
+  <ul class="footer-links">
+    <li><a href="https://cosmoscenery.com">Home</a></li>
+    <li><a href="https://cosmoscenery.com/#about">About</a></li>
+    <li><a href="https://cosmoscenery.com/#services">Services</a></li>
+    <li><a href="https://cosmoscenery.com/#contact">Contact</a></li>
+  </ul>
+  <div class="footer-copy">© 2026 COSMOSCENERY ANALYTICS · PORTO, PORTUGAL</div>
+</footer>
+
+</body>
+</html>
