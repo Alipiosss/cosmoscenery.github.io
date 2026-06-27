@@ -348,6 +348,14 @@
 
   .about-left { position: sticky; top: 8rem; }
 
+  .about-left.no-photo {
+    display: none;
+  }
+
+  .about-grid.no-photo {
+    grid-template-columns: 1fr;
+  }
+
   .about-portrait {
     width: 100%;
     aspect-ratio: 3/4;
@@ -1146,12 +1154,10 @@
 
 <!-- ═══════════════════════════════ ABOUT ═══════════════════════════════ -->
 <section id="about">
-  <div class="about-grid">
-    <div class="about-left">
-      <div class="about-portrait">
-        <!-- ADD YOUR PHOTO HERE: replace this div with <img src="your-photo.jpg" alt="Suzana Alípio" style="width:100%;height:100%;object-fit:cover;"> -->
-        <div style="width:100%;height:100%;background:var(--mid);"></div>
-      </div>
+  <div class="about-grid no-photo">
+    <div class="about-left no-photo">
+      <!-- PHOTO: when ready, replace the comment below with: <div class="about-portrait"><img src="your-photo.jpg" alt="Suzana Alípio" style="width:100%;height:100%;object-fit:cover;border-radius:2px;"></div> -->
+
       <div class="about-credentials">
         <div class="credential"><div class="credential-dot"></div>PhD Candidate — University of Vigo</div>
         <div class="credential"><div class="credential-dot"></div>MBA — European University Lisbon</div>
