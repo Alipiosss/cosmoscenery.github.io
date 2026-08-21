@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BI e Dashboards — Cosmoscenery Analytics</title>
+<link rel="alternate" hreflang="en" href="../bi.html">
+<link rel="alternate" hreflang="pt-PT" href="bi.html">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0A0A0B;
+    --white: #F5F4F0;
+    --accent: #C8F03C;
+    --accent2: #3CF0C8;
+    --mid: #1A1A1E;
+    --muted: #6B6B72;
+    --border: rgba(255,255,255,0.08);
+    --serif: 'DM Serif Display', serif;
+    --sans: 'DM Sans', sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--black); color: var(--white); font-family: var(--sans); font-size: 16px; line-height: 1.6; overflow-x: hidden; }
+
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.5rem 4rem;
+    background: rgba(10,10,11,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo { font-family: var(--mono); font-size: 0.85rem; letter-spacing: 0.15em; color: var(--accent); text-transform: uppercase; text-decoration: none; }
+  .nav-cta { background: var(--accent); color: var(--black); padding: 0.5rem 1.25rem; border-radius: 2px; font-weight: 600; font-size: 0.85rem; text-decoration: none; transition: background 0.2s; }
+  .nav-cta:hover { background: var(--accent2); }
+
+  .btn-primary { background: var(--accent); color: var(--black); padding: 0.9rem 2rem; border: none; border-radius: 2px; font-family: var(--sans); font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.2s; letter-spacing: 0.03em; text-decoration: none; display: inline-block; }
+  .btn-primary:hover { background: var(--accent2); transform: translateY(-1px); }
+  .btn-secondary { background: transparent; color: var(--white); padding: 0.9rem 2rem; border: 1px solid rgba(255,255,255,0.2); border-radius: 2px; font-family: var(--sans); font-size: 0.9rem; font-weight: 500; cursor: pointer; transition: all 0.2s; text-decoration: none; display: inline-block; }
+  .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+  .section-tag { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.2em; color: var(--accent); text-transform: uppercase; margin-bottom: 1rem; }
+
+  /* HERO */
+  .hero { min-height: 100vh; display: flex; align-items: center; padding: 8rem 4rem 4rem; position: relative; overflow: hidden; }
+  .hero::before { content: ''; position: absolute; top: -100px; right: -100px; width: 700px; height: 700px; border-radius: 50%; background: radial-gradient(circle, rgba(60,240,200,0.06) 0%, transparent 70%); pointer-events: none; }
+  .hero-content { max-width: 800px; }
+  .hero-tag { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.2em; color: var(--accent2); text-transform: uppercase; margin-bottom: 2rem; opacity: 0; animation: fadeUp 0.8s 0.2s forwards; }
+  .hero-h1 { font-family: var(--serif); font-size: clamp(3rem, 5vw, 5.5rem); line-height: 1.05; letter-spacing: -0.02em; margin-bottom: 2rem; opacity: 0; animation: fadeUp 0.8s 0.4s forwards; }
+  .hero-h1 em { font-style: italic; color: var(--accent); }
+  .hero-sub { font-size: 1.15rem; color: rgba(245,244,240,0.65); max-width: 600px; line-height: 1.75; margin-bottom: 3rem; opacity: 0; animation: fadeUp 0.8s 0.6s forwards; }
+  .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; opacity: 0; animation: fadeUp 0.8s 0.8s forwards; }
+
+  /* PROBLEM */
+  .problem { padding: 6rem 4rem; background: var(--mid); }
+  .problem-inner { max-width: 1200px; margin: 0 auto; }
+  .problem-header { max-width: 700px; margin-bottom: 4rem; }
+  .problem-header h2 { font-family: var(--serif); font-size: clamp(2rem, 3.5vw, 3rem); line-height: 1.15; margin-bottom: 1.5rem; }
+  .problem-header h2 em { font-style: italic; color: var(--accent); }
+  .problem-header p { color: rgba(245,244,240,0.6); font-size: 1rem; line-height: 1.8; }
+
+  .symptoms { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); }
+  .symptom { background: var(--mid); padding: 2.5rem; border-top: 2px solid var(--border); transition: border-color 0.3s; }
+  .symptom:hover { border-top-color: var(--accent); }
+  .symptom-icon { font-family: var(--mono); font-size: 1.5rem; color: var(--accent); margin-bottom: 1rem; opacity: 0.6; }
+  .symptom h4 { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.6rem; }
+  .symptom p { font-size: 0.82rem; color: var(--muted); line-height: 1.65; }
+
+  /* TOOLS */
+  .tools { padding: 6rem 4rem; }
+  .tools-header { max-width: 700px; margin-bottom: 4rem; }
+  .tools-header h2 { font-family: var(--serif); font-size: clamp(2rem, 3.5vw, 3rem); line-height: 1.15; margin-bottom: 1.5rem; }
+  .tools-header h2 em { font-style: italic; color: var(--accent); }
+  .tools-header p { color: rgba(245,244,240,0.6); font-size: 1rem; line-height: 1.75; }
+
+  .tools-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); }
+  .tool-card { background: var(--black); padding: 3rem; transition: background 0.3s; }
+  .tool-card:hover { background: var(--mid); }
+  .tool-name { font-family: var(--serif); font-size: 1.75rem; color: var(--accent); margin-bottom: 0.5rem; }
+  .tool-tag { font-family: var(--mono); font-size: 0.65rem; color: var(--muted); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 1.5rem; }
+  .tool-card p { color: rgba(245,244,240,0.55); font-size: 0.88rem; line-height: 1.75; margin-bottom: 1.5rem; }
+  .tool-best-for { font-family: var(--mono); font-size: 0.65rem; color: var(--accent2); letter-spacing: 0.1em; }
+
+  /* WHAT WE BUILD */
+  .builds { padding: 6rem 4rem; background: var(--mid); }
+  .builds-header { max-width: 700px; margin-bottom: 4rem; }
+  .builds-header h2 { font-family: var(--serif); font-size: clamp(2rem, 3.5vw, 3rem); line-height: 1.15; margin-bottom: 1.5rem; }
+  .builds-header h2 em { font-style: italic; color: var(--accent); }
+
+  .builds-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: var(--border); }
+  .build-card { background: var(--mid); padding: 3rem; }
+  .build-num { font-family: var(--mono); font-size: 0.65rem; color: var(--accent); letter-spacing: 0.15em; margin-bottom: 1rem; }
+  .build-card h3 { font-family: var(--serif); font-size: 1.35rem; margin-bottom: 1rem; }
+  .build-card p { color: rgba(245,244,240,0.55); font-size: 0.88rem; line-height: 1.75; margin-bottom: 1.5rem; }
+  .build-includes { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+  .build-includes li { font-size: 0.8rem; color: rgba(245,244,240,0.5); display: flex; gap: 0.75rem; }
+  .build-includes li::before { content: '→'; color: var(--accent); font-family: var(--mono); flex-shrink: 0; }
+
+  /* LIVE WORK */
+  .live-work { padding: 6rem 4rem; }
+  .live-work-header { max-width: 700px; margin-bottom: 4rem; }
+  .live-work-header h2 { font-family: var(--serif); font-size: clamp(2rem, 3.5vw, 3rem); line-height: 1.15; margin-bottom: 1.5rem; }
+  .live-work-header h2 em { font-style: italic; color: var(--accent); }
+  .live-work-header p { color: rgba(245,244,240,0.6); font-size: 1rem; line-height: 1.75; }
+
+  .dashboards-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); }
+  .dashboard-card { background: var(--black); padding: 2.5rem; display: flex; flex-direction: column; justify-content: space-between; }
+  .dashboard-tag { font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.15em; color: var(--accent2); text-transform: uppercase; margin-bottom: 1rem; }
+  .dashboard-card h3 { font-family: var(--serif); font-size: 1.2rem; line-height: 1.25; margin-bottom: 0.75rem; }
+  .dashboard-card p { color: rgba(245,244,240,0.55); font-size: 0.82rem; line-height: 1.7; margin-bottom: 1.5rem; }
+  .dashboard-link { display: inline-block; background: var(--accent); color: var(--black); padding: 0.65rem 1.25rem; border-radius: 2px; font-size: 0.82rem; font-weight: 600; text-decoration: none; transition: background 0.2s; text-align: center; }
+  .dashboard-link:hover { background: var(--accent2); }
+
+  /* PROCESS */
+  .process { padding: 6rem 4rem; background: var(--mid); }
+  .process-header { max-width: 700px; margin-bottom: 4rem; }
+  .process-header h2 { font-family: var(--serif); font-size: clamp(2rem, 3.5vw, 3rem); line-height: 1.15; margin-bottom: 1.5rem; }
+  .process-header h2 em { font-style: italic; color: var(--accent); }
+  .process-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); }
+  .process-step { background: var(--mid); padding: 2.5rem; }
+  .step-num { font-family: var(--mono); font-size: 0.65rem; color: var(--accent); letter-spacing: 0.15em; margin-bottom: 1rem; }
+  .process-step h4 { font-size: 1rem; font-weight: 600; margin-bottom: 0.75rem; }
+  .process-step p { font-size: 0.82rem; color: var(--muted); line-height: 1.65; }
+
+  /* CTA */
+  .cta { padding: 8rem 4rem; text-align: center; position: relative; overflow: hidden; }
+  .cta::before { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 800px; height: 800px; border-radius: 50%; background: radial-gradient(circle, rgba(200,240,60,0.05) 0%, transparent 70%); pointer-events: none; }
+  .cta h2 { font-family: var(--serif); font-size: clamp(2.5rem, 4vw, 4rem); line-height: 1.1; margin-bottom: 1.5rem; position: relative; }
+  .cta h2 em { font-style: italic; color: var(--accent); }
+  .cta p { color: rgba(245,244,240,0.6); font-size: 1.1rem; line-height: 1.75; max-width: 600px; margin: 0 auto 3rem; position: relative; }
+  .cta-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; position: relative; }
+
+  /* FOOTER */
+  footer { background: var(--mid); padding: 3rem 4rem; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+  .footer-logo { font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.15em; color: var(--accent); text-transform: uppercase; text-decoration: none; }
+  .footer-links { display: flex; gap: 2rem; list-style: none; }
+  .footer-links a { color: var(--muted); text-decoration: none; font-size: 0.8rem; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--white); }
+  .footer-copy { font-family: var(--mono); font-size: 0.65rem; color: var(--muted); letter-spacing: 0.1em; }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+  @media (max-width: 900px) {
+    nav { padding: 1.25rem 1.5rem; }
+    .hero, .problem, .tools, .builds, .live-work, .process, .cta { padding: 6rem 1.5rem 4rem; }
+    .symptoms, .tools-grid, .dashboards-grid { grid-template-columns: 1fr; }
+    .builds-grid { grid-template-columns: 1fr; }
+    .process-steps { grid-template-columns: repeat(2, 1fr); }
+    footer { flex-direction: column; align-items: flex-start; padding: 2rem 1.5rem; }
+  }
+
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a { color: rgba(245,244,240,0.65); text-decoration: none; font-size: 0.85rem; font-weight: 500; letter-spacing: 0.05em; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--white); }
+  @media (max-width: 900px) { .nav-links { display: none; } }
+
+  /* ── MODALS ── */
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 999; overflow-y: auto; padding: 2rem 1rem; }
+  .modal-overlay.active { display: flex; align-items: flex-start; justify-content: center; }
+  .modal-box { background: var(--mid); border: 1px solid var(--border); border-top: 3px solid var(--accent); border-radius: 2px; max-width: 760px; width: 100%; padding: 3rem; position: relative; margin: auto; }
+  .modal-close { position: absolute; top: 1.25rem; right: 1.5rem; background: none; border: none; color: var(--muted); font-size: 1.5rem; cursor: pointer; line-height: 1; transition: color 0.2s; }
+  .modal-close:hover { color: var(--white); }
+  .modal-box h2 { font-family: var(--serif); font-size: 1.75rem; margin-bottom: 0.5rem; color: var(--white); }
+  .modal-effective { font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.15em; color: var(--accent); text-transform: uppercase; margin-bottom: 2rem; }
+  .modal-box h3 { font-size: 0.85rem; font-weight: 600; color: var(--white); margin: 1.75rem 0 0.5rem; letter-spacing: 0.03em; }
+  .modal-box p, .modal-box li { font-size: 0.875rem; color: rgba(245,244,240,0.6); line-height: 1.8; margin-bottom: 0.5rem; }
+  .modal-box ul { padding-left: 1.25rem; margin-bottom: 0.5rem; }
+  .modal-box a { color: var(--accent); }
+  .modal-box hr { border: none; border-top: 1px solid var(--border); margin: 1.5rem 0; }
+
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">Cosmoscenery Analytics</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Início</a></li>
+    <li><a href="index.html#about">Sobre</a></li>
+    <li><a href="index.html#services">Serviços</a></li>
+    <li><a href="index.html#work">Trabalho Real</a></li>
+    <li><a href="index.html#cases">Casos de Estudo</a></li>
+    <li><a href="index.html#insights">Insights</a></li>
+    <li><a href="../bi.html" class="nav-cta" style="background:transparent; border:1px solid rgba(255,255,255,0.2); color:var(--white); font-weight:500;">EN</a></li>
+    <li><a href="mailto:suzanab@cosmoscenery.com" class="nav-cta">Vamos Falar</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-tag">// Implementação de BI e Dashboards</div>
+    <h1 class="hero-h1">Os seus dados já existem.<br><em>Torne-os visíveis.</em></h1>
+    <p class="hero-sub">Construímos dashboards em Power BI, Looker Studio e Tableau que a sua equipa de gestão realmente utiliza — porque são construídos à volta do funcionamento do seu negócio, e não das capacidades da ferramenta.</p>
+    <div class="hero-btns">
+      <a href="mailto:suzanab@cosmoscenery.com" class="btn-primary">Marcar Chamada de Diagnóstico →</a>
+      <a href="index.html" class="btn-secondary">Voltar ao Site Principal</a>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section class="problem">
+  <div class="problem-inner">
+    <div class="problem-header">
+      <div class="section-tag">// Soa-lhe familiar?</div>
+      <h2>A maioria dos projetos de BI falha.<br><em>Não tecnicamente. Operacionalmente.</em></h2>
+      <p>Os dashboards são construídos. Os dados são ligados. E seis meses depois, ninguém os consulta. O problema não é a ferramenta — é o fosso entre o que a ferramenta mostra e o que a gestão realmente precisa de decidir.</p>
+    </div>
+    <div class="symptoms">
+      <div class="symptom">
+        <div class="symptom-icon">◉</div>
+        <h4>O dashboard que ninguém abre</h4>
+        <p>Construído pelo departamento de TI, aprovado pela contabilidade, ignorado por todos. Quando as métricas não correspondem a decisões reais, a adoção morre semanas após o lançamento.</p>
+      </div>
+      <div class="symptom">
+        <div class="symptom-icon">◉</div>
+        <h4>O Excel que nunca morre</h4>
+        <p>Alguém continua a compilar relatórios manualmente todas as segundas-feiras de manhã. A ferramenta de BI existe, mas a folha de cálculo continua a ser a fonte da verdade.</p>
+      </div>
+      <div class="symptom">
+        <div class="symptom-icon">◉</div>
+        <h4>Os dados em que ninguém confia</h4>
+        <p>Dois departamentos têm números diferentes para a mesma métrica. A gestão deixa de usar o dashboard porque não consegue saber qual o valor correto.</p>
+      </div>
+      <div class="symptom">
+        <div class="symptom-icon">◉</div>
+        <h4>O relatório que chega tarde demais</h4>
+        <p>Quando os dados de desempenho do mês anterior ficam prontos, as decisões já foram tomadas — por instinto, com informação incompleta, "ao feeling".</p>
+      </div>
+      <div class="symptom">
+        <div class="symptom-icon">◉</div>
+        <h4>As métricas que ninguém definiu</h4>
+        <p>O dashboard tem 47 gráficos. Ninguém chegou a acordo sobre o que significa "conversão", ou qual versão de "receita" usar. Mede tudo e não diz nada.</p>
+      </div>
+      <div class="symptom">
+        <div class="symptom-icon">◉</div>
+        <h4>A ferramenta sem dono</h4>
+        <p>O consultor que a construiu já não está. Ninguém na equipa sabe como a atualizar. Os dados deixam de ser atualizados e o dashboard morre silenciosamente.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TOOLS -->
+<section class="tools">
+  <div class="tools-header">
+    <div class="section-tag">// As Ferramentas que Usamos</div>
+    <h2>A ferramenta certa para<br><em>o seu negócio.</em></h2>
+    <p>Somos agnósticos quanto à ferramenta — recomendamos a plataforma que se adequa à sua equipa, aos seus dados e ao seu orçamento. Não a que calhamos a conhecer melhor.</p>
+  </div>
+  <div class="tools-grid">
+    <div class="tool-card">
+      <div class="tool-name">Power BI</div>
+      <div class="tool-tag">Ecossistema Microsoft</div>
+      <p>A opção mais poderosa para empresas que já utilizam o Microsoft 365. Integração profunda com Excel, SharePoint e Teams. A melhor opção para modelos de dados complexos e grandes volumes de dados.</p>
+      <div class="tool-best-for">IDEAL PARA → PMEs de maior dimensão · Empresas Microsoft · Dados complexos</div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-name">Looker Studio</div>
+      <div class="tool-tag">Ecossistema Google · Gratuito</div>
+      <p>A plataforma de BI gratuita da Google. Excelente para empresas que utilizam Google Analytics, Google Ads ou Google Sheets. Rápida de implementar, fácil de aceder e partilhar sem custos de licenciamento.</p>
+      <div class="tool-best-for">IDEAL PARA → Utilizadores Google · Orçamentos reduzidos · Dados de marketing</div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-name">Tableau</div>
+      <div class="tool-tag">Líder em Análise Visual</div>
+      <p>O padrão de referência para exploração visual de dados. Incomparável para visualizações complexas, dashboards públicos e storytelling com dados. Utilizado no nosso próprio trabalho com clientes e no portefólio Tableau Public.</p>
+      <div class="tool-best-for">IDEAL PARA → Storytelling com dados · Dashboards públicos · Relatórios ESG</div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT WE BUILD -->
+<section class="builds">
+  <div class="builds-header">
+    <div class="section-tag">// O Que Construímos</div>
+    <h2>Dashboards construídos para<br><em>decisões, não decoração.</em></h2>
+  </div>
+  <div class="builds-grid">
+    <div class="build-card">
+      <div class="build-num">01 / EXECUTIVO</div>
+      <h3>Dashboard de Desempenho Executivo</h3>
+      <p>Uma visão única da saúde do negócio para a equipa de liderança — receita, margem, número de colaboradores, métricas de clientes e KPIs operacionais num só lugar. Construído para revisões semanais de gestão.</p>
+      <ul class="build-includes">
+        <li>Desempenho financeiro global</li>
+        <li>Pipeline comercial e conversão</li>
+        <li>Indicadores de eficiência operacional</li>
+        <li>Alertas de exceção e sinais de tendência</li>
+      </ul>
+    </div>
+    <div class="build-card">
+      <div class="build-num">02 / OPERACIONAL</div>
+      <h3>Dashboard de Controlo Operacional</h3>
+      <p>Visibilidade em tempo real sobre as operações do dia a dia — desempenho de processos, utilização de capacidade, métricas de qualidade e produtividade da equipa. Construído para gestores operacionais, não apenas para a administração.</p>
+      <ul class="build-includes">
+        <li>Tempos de ciclo dos processos e estrangulamentos</li>
+        <li>Capacidade e distribuição de carga de trabalho</li>
+        <li>Acompanhamento da qualidade e taxa de erros</li>
+        <li>Desempenho de entregas e SLA</li>
+      </ul>
+    </div>
+    <div class="build-card">
+      <div class="build-num">03 / FINANCEIRO</div>
+      <h3>Dashboard de Inteligência Financeira</h3>
+      <p>Substitui relatórios manuais em Excel por dashboards financeiros automatizados — P&L por linha de produto, previsão de cash flow, desvios orçamentais e análise de margens atualizados em tempo real.</p>
+      <ul class="build-includes">
+        <li>P&L por produto, serviço ou região</li>
+        <li>Acompanhamento de desvios orçamento vs. real</li>
+        <li>Cash flow e fundo de maneio</li>
+        <li>Estrutura de custos e análise de margens</li>
+      </ul>
+    </div>
+    <div class="build-card">
+      <div class="build-num">04 / ESG</div>
+      <h3>Dashboard de ESG e Sustentabilidade</h3>
+      <p>Acompanhamento em tempo real do desempenho ESG — emissões de carbono, consumo de energia, métricas sociais e indicadores de governança — construído para reporte a investidores, conformidade regulatória e responsabilização interna.</p>
+      <ul class="build-includes">
+        <li>KPIs ambientais e acompanhamento de carbono</li>
+        <li>Métricas sociais e dados sobre colaboradores</li>
+        <li>Indicadores de governança</li>
+        <li>Exportação de relatórios prontos para investidores</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- LIVE WORK -->
+<section class="live-work">
+  <div class="live-work-header">
+    <div class="section-tag">// Trabalho Real</div>
+    <h2>Veja os nossos dashboards<br><em>em ação.</em></h2>
+    <p>Trabalho analítico real desenvolvido durante os programas de Data Analytics e Business Intelligence da Google — disponível publicamente no Tableau Public.</p>
+  </div>
+  <div class="dashboards-grid">
+    <div class="dashboard-card">
+      <div>
+        <div class="dashboard-tag">Análise de Dados · TikTok</div>
+        <h3>TikTok Claims — Análise Exploratória de Dados</h3>
+        <p>AED estruturada sobre conjuntos de dados de reclamações do TikTok — identificando padrões, outliers e problemas de qualidade de dados para apoiar decisões de modelação de classificação.</p>
+      </div>
+      <a href="https://public.tableau.com/app/profile/suzana.al.pio/viz/TikTok-EDAofClaimDataset/Story1" target="_blank" class="dashboard-link">Ver Dashboard →</a>
+    </div>
+    <div class="dashboard-card">
+      <div>
+        <div class="dashboard-tag">BI · Apoio ao Cliente</div>
+        <h3>Google Fiber — Análise de Chamadas Repetidas</h3>
+        <p>Dashboard que acompanha chamadas repetidas de apoio ao cliente para identificar falhas de resolução, períodos de pico e oportunidades de melhoria operacional.</p>
+      </div>
+      <a href="https://public.tableau.com/app/profile/suzana.al.pio/viz/GoogleFiber_17704866269160/RepeatCalls" target="_blank" class="dashboard-link">Ver Dashboard →</a>
+    </div>
+    <div class="dashboard-card">
+      <div>
+        <div class="dashboard-tag">ESG · Sustentabilidade</div>
+        <h3>Emissões de CO₂ — Dashboard de Sustentabilidade</h3>
+        <p>Dashboard ESG interativo que visualiza dados de emissões de CO₂ — alinhado com os serviços de reporte de sustentabilidade e frameworks ESG.</p>
+      </div>
+      <a href="https://public.tableau.com/app/profile/suzana.al.pio/viz/DashboardsCO2_17304471540610/Painel1" target="_blank" class="dashboard-link">Ver Dashboard →</a>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="process">
+  <div class="process-header">
+    <div class="section-tag">// Como Funciona</div>
+    <h2>Do caos de dados<br><em>à clareza operacional.</em></h2>
+  </div>
+  <div class="process-steps">
+    <div class="process-step">
+      <div class="step-num">PASSO 01</div>
+      <h4>Levantamento e Diagnóstico</h4>
+      <p>Mapeamos as decisões que a sua equipa precisa de tomar, as fontes de dados disponíveis e os fossos entre elas. Sem suposições — partimos da sua realidade de gestão real.</p>
+    </div>
+    <div class="process-step">
+      <div class="step-num">PASSO 02</div>
+      <h4>Arquitetura de Dados</h4>
+      <p>Desenhamos o modelo de dados, ligamos as suas fontes, limpamos e validamos os dados, e construímos o pipeline que mantém o seu dashboard preciso e atualizado automaticamente.</p>
+    </div>
+    <div class="process-step">
+      <div class="step-num">PASSO 03</div>
+      <h4>Construção do Dashboard</h4>
+      <p>Construímos de forma iterativa — mostrando-lhe versões funcionais ao longo do processo. Vê o progresso, dá feedback, e o produto final reflete a forma como a sua equipa realmente pensa.</p>
+    </div>
+    <div class="process-step">
+      <div class="step-num">PASSO 04</div>
+      <h4>Adoção e Formação</h4>
+      <p>Formamos a sua equipa, documentamos tudo, e ficamos disponíveis durante 30 dias após o lançamento. O objetivo é um dashboard que a sua equipa domina — não um de que dependa de nós para manter.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <h2>Os seus dados já existem.<br><em>Vamos pô-los a trabalhar para si.</em></h2>
+  <p>Marque uma chamada de diagnóstico de 30 minutos. Vamos mapear o seu panorama de dados atual, identificar o dashboard de maior valor a construir primeiro, e mostrar-lhe como é a clareza operacional para o seu negócio.</p>
+  <div class="cta-btns">
+    <a href="mailto:suzanab@cosmoscenery.com" class="btn-primary">Marcar Chamada de Diagnóstico →</a>
+    <a href="index.html" class="btn-secondary">Explorar Todos os Serviços</a>
+  </div>
+</section>
+
+<footer>
+  <a href="index.html" class="footer-logo">Cosmoscenery Analytics</a>
+  <ul class="footer-links">
+    <li><a href="index.html">Início</a></li>
+    <li><a href="index.html#about">Sobre</a></li>
+    <li><a href="index.html#services">Serviços</a></li>
+    <li><a href="index.html#cases">Casos de Estudo</a></li>
+    <li><a href="index.html#contact">Contacto</a></li>
+    <li><a href="#" onclick="openModal('modal-privacy')">Política de Privacidade</a></li>
+    <li><a href="#" onclick="openModal('modal-terms')">Termos e Condições</a></li>
+    <li><a href="../bi.html">EN</a></li>
+  </ul>
+  <div style="display:flex; align-items:center; gap:1.5rem; flex-wrap:wrap;">
+    <a href="https://www.linkedin.com/company/cosmoscenery-analytics" target="_blank" aria-label="Cosmoscenery Analytics on LinkedIn" style="display:flex; align-items:center; gap:0.5rem; text-decoration:none; color:var(--muted); font-family:var(--mono); font-size:0.65rem; letter-spacing:0.1em; transition:color 0.2s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--muted)'">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+      LINKEDIN
+    </a>
+    <div class="footer-copy">© 2026 COSMOSCENERY ANALYTICS · PORTO, PORTUGAL · NIPC 510721613</div>
+  </div>
+</footer>
+
+
+<!-- ═══════════════ MODAL: POLÍTICA DE PRIVACIDADE ═══════════════ -->
+<div id="modal-privacy" class="modal-overlay" onclick="closeModalOutside(event,'modal-privacy')">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('modal-privacy')" aria-label="Fechar">✕</button>
+    <h2>Política de Privacidade</h2>
+    <div class="modal-effective">Data de Entrada em Vigor: 27 de junho de 2026</div>
+    <p>Na <strong>Cosmoscenery Analytics</strong> (Cosmoscenery Analytics, Unipessoal Lda · NIPC 510721613 · Porto, Portugal), comprometemo-nos a proteger a sua privacidade e a cumprir o RGPD (Regulamento UE 2016/679) e a legislação portuguesa aplicável em matéria de proteção de dados.</p>
+    <h3>1. Quem Somos</h3>
+    <p>O responsável pelo tratamento de dados é a Cosmoscenery Analytics, Unipessoal Lda (NIPC 510721613), Porto, Portugal. Contacto: <a href="mailto:suzanab@cosmoscenery.com">suzanab@cosmoscenery.com</a>.</p>
+    <h3>2. Que Dados Recolhemos</h3>
+    <p>Apenas recolhemos dados pessoais que forneça voluntariamente:</p>
+    <ul>
+      <li><strong>Formulário de contacto:</strong> nome, empresa, email e mensagem quando submete um pedido de informação.</li>
+      <li><strong>Subscrição da newsletter:</strong> endereço de email quando subscreve.</li>
+      <li><strong>Comunicações diretas:</strong> informação que partilha ao contactar-nos por email.</li>
+    </ul>
+    <p>Não utilizamos cookies, tecnologias de rastreio ou ferramentas de análise. Não recolhemos quaisquer dados de forma automática.</p>
+    <h3>3. Fundamento Jurídico e Finalidade</h3>
+    <p>Tratamos os seus dados com base no seu <strong>consentimento</strong> (Art. 6.º, n.º 1, alínea a) do RGPD) para subscrições de newsletter e formulários de contacto, e em <strong>interesse legítimo</strong> (Art. 6.º, n.º 1, alínea f) do RGPD) para responder a pedidos de informação. Utilizamos os seus dados exclusivamente para responder a pedidos de informação e enviar as newsletters que subscreveu.</p>
+    <h3>4. Conservação de Dados</h3>
+    <p>Os pedidos de contacto são conservados por um período máximo de 2 anos ou até que solicite a sua eliminação. Os dados da newsletter são conservados até anular a subscrição.</p>
+    <h3>5. Os Seus Direitos</h3>
+    <p>Ao abrigo do RGPD, tem o direito de: aceder aos seus dados · corrigi-los · eliminá-los · retirar o consentimento · apresentar reclamação junto da CNPD (<a href="https://www.cnpd.pt" target="_blank">cnpd.pt</a>). Contacte-nos através de <a href="mailto:suzanab@cosmoscenery.com">suzanab@cosmoscenery.com</a> — respondemos no prazo de 30 dias.</p>
+    <h3>6. Segurança dos Dados</h3>
+    <p>Adotamos medidas adequadas para proteger os seus dados. Os seus dados nunca são vendidos ou partilhados com terceiros sem o seu consentimento explícito.</p>
+    <h3>7. Cancelamento da Newsletter</h3>
+    <p>Cancele a subscrição a qualquer momento através do link presente em qualquer email ou contactando <a href="mailto:suzanab@cosmoscenery.com">suzanab@cosmoscenery.com</a>.</p>
+    <h3>8. Atualizações</h3>
+    <p>Podemos atualizar esta política periodicamente. A versão atual estará sempre disponível nesta página.</p>
+    <hr>
+    <p style="font-size:0.78rem;">Dúvidas? <a href="mailto:suzanab@cosmoscenery.com">suzanab@cosmoscenery.com</a></p>
+  </div>
+</div>
+
+<!-- ═══════════════ MODAL: TERMOS E CONDIÇÕES ═══════════════ -->
+<div id="modal-terms" class="modal-overlay" onclick="closeModalOutside(event,'modal-terms')">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('modal-terms')" aria-label="Fechar">✕</button>
+    <h2>Termos e Condições</h2>
+    <div class="modal-effective">Data de Entrada em Vigor: 27 de junho de 2026</div>
+    <p>Bem-vindo à <strong>Cosmoscenery Analytics</strong>. Estes Termos regem a utilização do nosso website e serviços. Ao aceder ao nosso website, concorda com estes Termos.</p>
+    <h3>1. Aceitação dos Termos</h3>
+    <p>Ao utilizar o cosmoscenery.com, aceita estes Termos na íntegra. Se não concordar, não utilize o site.</p>
+    <h3>2. Sobre Nós</h3>
+    <p>Cosmoscenery Analytics, Unipessoal Lda · NIPC 510721613 · Porto, Portugal. Contacto: <a href="mailto:suzanab@cosmoscenery.com">suzanab@cosmoscenery.com</a>.</p>
+    <h3>3. Utilização do Website</h3>
+    <p>Compromete-se a utilizar este website apenas para fins lícitos. As atividades proibidas incluem: violar leis aplicáveis · tentar obter acesso não autorizado · utilizar bots para extrair dados · transmitir código malicioso. Reservamo-nos o direito de restringir o acesso sem aviso prévio em caso de violação destes Termos.</p>
+    <h3>4. Subscrição da Newsletter</h3>
+    <p>Ao subscrever, concorda em receber atualizações por email. Pode cancelar a subscrição a qualquer momento através do link presente em qualquer email ou contactando-nos diretamente.</p>
+    <h3>5. Propriedade Intelectual</h3>
+    <p>Todo o conteúdo deste website — textos, imagens, logótipos, dashboards e outros materiais — é propriedade da Cosmoscenery Analytics, Unipessoal Lda e está protegido por leis de direitos de autor e marcas registadas. Não pode reproduzir ou distribuir qualquer conteúdo sem autorização prévia por escrito.</p>
+    <h3>6. Ligações Externas</h3>
+    <p>O nosso website pode conter ligações para sites de terceiros (Tableau Public, LinkedIn, etc.). Não somos responsáveis pelo respetivo conteúdo ou políticas.</p>
+    <h3>7. Limitação de Responsabilidade</h3>
+    <p>Procuramos fornecer informação precisa, mas não garantimos a sua completude ou fiabilidade. A utilização do website é da sua exclusiva responsabilidade. Não somos responsáveis por quaisquer danos diretos, indiretos ou consequenciais resultantes da utilização do website.</p>
+    <h3>8. Privacidade</h3>
+    <p>Consulte a nossa <a href="#" onclick="closeModal('modal-terms'); openModal('modal-privacy')">Política de Privacidade</a> para mais detalhes sobre como tratamos os seus dados pessoais em conformidade com o RGPD.</p>
+    <h3>9. Alterações aos Termos</h3>
+    <p>Reservamo-nos o direito de atualizar estes Termos a qualquer momento. A utilização continuada do website constitui aceitação dos Termos atualizados.</p>
+    <h3>10. Lei Aplicável</h3>
+    <p>Estes Termos são regidos pelas leis de Portugal. Quaisquer litígios ficam sujeitos à jurisdição exclusiva dos tribunais do Porto, Portugal.</p>
+    <hr>
+    <p style="font-size:0.78rem;">Dúvidas? <a href="mailto:suzanab@cosmoscenery.com">suzanab@cosmoscenery.com</a></p>
+  </div>
+</div>
+
+<script>
+  function openModal(id) { document.getElementById(id).classList.add('active'); document.body.style.overflow = 'hidden'; }
+  function closeModal(id) { document.getElementById(id).classList.remove('active'); document.body.style.overflow = ''; }
+  function closeModalOutside(e, id) { if (e.target === document.getElementById(id)) closeModal(id); }
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') document.querySelectorAll('.modal-overlay.active').forEach(m => { m.classList.remove('active'); document.body.style.overflow = ''; });
+  });
+</script>
+</body>
+</html>
